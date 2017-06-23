@@ -203,30 +203,30 @@
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
       <div class="panel-body">
 		<h5>Thesis</h5>
-			{% for thesis in source.get("thesis")%}
+			{% for thesis in source.get("thesis", [])%}
 			{{ thesis|safe }}
 			{% endfor %}
 		<h5>Thesis Advisor</h5>
-			{% for thesisAdvisor in source.get("thesisAdvisor")%}
+			{% for thesisAdvisor in source.get("thesisAdvisor", [])%}
 			{{ thesisAdvisor|safe}}
 			{% endfor %}
         {% if "sponsor" in source %}
 		<h5>Department/Program</h5>
-			{% for sponsor in source.get("sponsor")%}
+			{% for sponsor in source.get("sponsor", [])%}
 			{{ sponsor|safe}}
 			{% endfor %}
         {% endif %}
 		<h5>Degree Name</h5>
-			{% for degreeName in source.get("degreeName")%}
+			{% for degreeName in source.get("degreeName", [])%}
 			{{ degreeName|safe}}
 			{% endfor %}	
 		<h5>Degree Type</h5>
-			{% for degreeType in source.get("degreeType")%}
+			{% for degreeType in source.get("degreeType", [])%}
 			{{ degreeType|safe}}
 			{% endfor %}
         {% if "degreeGrantor" in source %}
 		<h5>Degree Grantor</h5>
-			{% for degreeGrantor in source.get("degreeGrantor")%}
+			{% for degreeGrantor in source.get("degreeGrantor", [])%}
 			{{ degreeGrantor|safe}}
 			{% endfor %}
         {% endif %}
