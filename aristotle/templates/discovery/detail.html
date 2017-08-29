@@ -7,88 +7,98 @@
  
 {% endblock %}
 
-{% block library_breadcrumb %}
- <div id="breadcrumb"></div>
-{% endblock %}
 
-{% block container %}
+{% block main %}
 <div class="container">
-		{% include "discovery/search-panel-row.html" %}
-		<div class="row" style="margin-top: 3em;">
-				<ol class="breadcrumb">
-						{% for row in source.get('inCollections', []) %}
-						<li {% if loop.last %}class="active"{% endif %}>
-						<a href="{{ url_for('fedora_object', identifier='pid', value=row) }}">
-								{{ row|title_principal|truncate(30, True) }}</a>
-						</li>
+<ol class="breadcrumb" style="margin-top: 1em;">
+{% for row in source.get('inCollections', []) %}
+    <li class="breadcrumb-item {% if loop.last %}active{% endif %}">
+        <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=row) }}">
+        {{ row|title_principal|truncate(30, True) }}</a>
+    </li>
+{% endfor %}
+</ol>
+
+<div class="row" >
+    <section class="col-12">
+        <h1>{{ source.get('titlePrincipal') }}</h1>
+        {% if 'creator' in source %}
+        <h3>by 
+        {% for creator in source.get('creator', []) %}
+        <a href="{{ url_for('aristotle.query') }}?mode=creator&q={{ creator }}">{{ creator }}</a>{% if not loop.last %},{% endif %}
+        {% endfor %}
+        </h3>
+        {% endif %}
+    </section>
+</div>
+<div class="row">
+    <section class="col-6">
+        <article class="jumbotron">
+            <img src="{{ url_for('aristotle.fedora_object', value=source.get('pid'), identifier="thumbnail") }}"
+                              class="img-responsive img-thumbnail">
+                              <br>
+                              <div class="btn-group" role="group">
+                                              {% for datastream in source.get('datastreams', []) %}	 
+                                             {% if not datastream.get('label') in ['PREVIEW', 'TN', 'PROXY_MP3', 'MEDIUM_SIZE'] %}
+
+                                              <a data-toggle="modal" href="#" data-target="#dialog-{{ loop.index }}" class="btn btn-default btn-lg">
+                                                              <i class="fa {{ datastream|icon }}"></i> 
+                                              </a>
+                                              
+                                              
+                                             {% endif %}
+                                              {% endfor %}
+                              </div>
+                              <br>
+                              <br>
+                              <div>
+                                     
+                                     <h5>Media Files</h5>
+                                     <ul> {% for datastream in source.get('datastreams', []) %} 
+                                             {% if not datastream.get('label') in ['PREVIEW', 'TN', 'PROXY_MP3', 'MEDIUM_SIZE'] %}
+                                             <li> 
+                                              <a data-toggle="modal" href="#" data-target="#dialog-{{ loop.index }}">
+                                             
+                                                              {{datastream.get('label')}}
+                                                              <i class="fa {{ datastream|icon }}"></i>
+                                              </a>
+                                                <a href="#"><i class="fa fa-cloud-download" aria-hidden="true"></i></a>
+                                              </li>	
+                                              {% endif %}
+                                                     {% endfor %}
+                                     </ul>
+                              </div>
+        </article>			
+    </section>
+    <section class="col-6">
+        <div  id="metadataaccordion" role="tablist" aria-multiselectable="true">
+            <article class="card">
+                <div class="card-header" role="tab" id="headingBasic">
+                    <h3 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#metadataaccordion" href="#collapseBasic"
+                       aria-expanded="true" aria-controls="collapseBasic">Basic Information</a>
+                    </h3>
+                </div>
+                {# START collapseBasic tabpanel #}
+                <div id="collapseBasic" class="collapse show" role="tabpanel" aria-labelledby="headingBasic">
+		    <div class="card-block">
+		    {% if 'creator' in source %}
+                        <h5>Creator</h5>
+                        <ul>
+                        {% for creator in source.get('creator', []) %}
+                            <li>{{ creator }}</li>
                         {% endfor %}
-                </ol>
-				
-				<h1>{{ source.get('titlePrincipal') }}</h1>
-				{% if 'creator' in source %}
-				<h3>by 
-				{% for creator in source.get('creator', []) %}
-				{{ creator }}{% if not loop.last %},{% endif %}
-				{% endfor %}
-		        </h3>
-				{% endif %}
-				{# include 'discovery/snippets/datastream-carousel.html' #}
-				<section class="col-md-6">
-				<img src="{{ url_for('fedora_object', value=source.get('pid'), identifier="thumbnail") }}"
-				 class="img-responsive img-thumbnail">
-				 <br>
-				 <div class="btn-group" role="group">
-						 {% for datastream in source.get('datastreams', []) %}	 
-                                                {% if not datastream.get('label') in ['PREVIEW', 'TN', 'PROXY_MP3', 'MEDIUM_SIZE'] %}
-
-						 <a data-toggle="modal" href="#" data-target="#dialog-{{ loop.index }}" class="btn btn-default btn-lg">
-								 <i class="glyphicon {{ datastream|icon }}"></i> 
-						 </a>
-                                                {% endif %}
-						 {% endfor %}
-				 </div>
-				 <br>
-				 <br>
-				 <div>
-					
-					<h5>Media Files</h5>
-					<ul> {% for datastream in source.get('datastreams', []) %} 
-                                                {% if not datastream.get('label') in ['PREVIEW', 'TN', 'PROXY_MP3', 'MEDIUM_SIZE'] %}
-						<li> 
-						 <a data-toggle="modal" href="#" data-target="#dialog-{{ loop.index }}">
-                                                
-								 {{datastream.get('label')}}
-								 <i class="glyphicon {{ datastream|icon }}"></i>
-						 </a>
-						 </li>	
-                                                 {% endif %}
-							{% endfor %}
-					</ul>
-				 </div>			
-				 </section>
-				<section class="col-md-6">
-				
-				<div class="panel-group" id="metadataaccordion" role="tablist" aria-multiselectable="true">
-
-
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingBasic">
-      <h3 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#metadataaccordion" href="#collapseBasic" aria-expanded="true" aria-controls="collapseBasic">
-          Basic Information
-        </a>
-      </h3>
-    </div>
-    <div id="collapseBasic" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingBasic">
-			<div class="panel-body">
-
-			 {% if 'creator' in source %}
-						<h5>Creator</h5>
-				{% for creator in source.get('creator', []) %}
-				{{ creator }}{% if not loop.last %},{% endif %}
-				{% endfor %}
-				{% endif %}
-                                {% if source.get('dateCreated') != None %}
+                        </ul>
+                     {% endif %}
+                    {% if 'contributor' in source %}
+                        <h5>Contributor</h5>
+                        <ul>
+                        {% for contributor in source.get('contributor', []) %}
+                            <li>{{ contributor}}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                     {% if source.get('dateCreated') != None %}
 				<h5>Date Created</h5>
 				{{ source.get('dateCreated') }}
                                 {% endif %}
@@ -115,7 +125,9 @@
                                   <ul>
 				  {% for row in info %}
                                     {% if not row == None %}
-				    <li>{{ row }}</li>
+				    <li>
+                                        <a href="{{ url_for('aristotle.query') }}?mode=facet&facet={{ subject|title }}&val={{ row }}">{{ row }}</a>
+                                    </li>
                                     {% endif %}
 				  {% endfor %}
         		          </ul>
@@ -124,123 +136,121 @@
 				<h5>Genre</h5>
 				<ul>
 				{% for genre in  source.get('genre', []) %}
-                <li>{{ genre }}</li>
+                                <li>{{ genre }}</li>
 				{% endfor %}
-		        </ul>
-
-
-      </div>
-    </div>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingOne">
-      <h3 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#metadataaccordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Abstract and Notes
-        </a>
-      </h3>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      <div class="panel-body">
-        <h5>Abstract</h5>
+		            </ul>
+                </div>
+            {# END collapseBasic tabpanel #}
+            </div>
+        </article>
+        <article class="card">
+            <div class="card-header" role="tab" id="headingOne">
+                <h3 class="mb-0">
+                    <a href="#collapseOne" data-toggle="collapse"
+                       data-parent="#metadataaccordion" aria-expanded="true" aria-controls="collapseOne">
+                        Abstract and Notes
+                    </a>
+                </h3>
+            </div>
+            {# START collapseOne tabpanel #}
+            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="card-block">
+                    <h5>Abstract</h5>
 		    {% for abstract in source.get("abstract", [])%}
 			<p>{{ abstract|safe }}</p>
 			{% endfor %}
-		<h5>Note</h5>
+		    <h5>Note</h5>
 			{% for note in source.get("note", [])%}
                         {% if note %}
 			<p>{{ note|safe }}</p>
                         {% endif %}
 			{% endfor %}
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h3 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#metadataaccordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Technical Metadata
-        </a>
-      </h3>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <h5>Administrative Notes</h5>
+                </div>
+            {# END collapseOne tabpanel #}
+            </div>
+        </article>
+        <article class="card">
+            <div class="card-header" role="tab" id="headingTwo">
+                <h3 class="mb-0">
+                    <a href="#collapseTwo" data-toggle="collapse"
+                       data-parent="#metadataaccordion"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                        Technical Metadata
+                    </a>
+                </h3>
+            </div>
+            <div id="collapseTwo" class="collapse" 
+                role="tabpanel" aria-labelledby="headingTwo">
+                <div class="card-block">
+                    <h5>Administrative Notes</h5>
 		    {% for adminNote in source.get("adminNote",[])%}
 			<p>{{ adminNote|safe }}</p>
 			{% endfor %}
-		<h5>Copyright</h5>
+		    <h5>Copyright</h5>
 			{{ source.get('useAndReproduction') }}
-		<h5>Publisher</h5>
+		    <h5>Publisher</h5>
 			{{ source.get('publisher') }}
-		<h5>PID</h5>
+		    <h5>PID</h5>
 			{{ source.get('pid') }}	
-                {# if source.get('handle') %}
-		<h5>Handle</h5>
-  		<a href="{{ source.get('handle') }}">{{ source.get('handle') }}</a>
-                {% endif #}
-                {% if source.get('digitalOrigin')  %}
-		<h5>Digital Origin</h5>
+                    {% if source.get('digitalOrigin')  %}
+		    <h5>Digital Origin</h5>
 			{{ source.get('digitalOrigin') }}
-                {% endif %}
-                {% if source.get('extent')  %}
-		<h5>Extent</h5>
+                    {% endif %}
+                    {% if source.get('extent')  %}
+		    <h5>Extent</h5>
 			{{ source.get('extent') }}
-                {% endif %}
-      </div>
-    </div>
-	</div>
-	{%if 'thesis' in source%}
-	<div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h3 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#metadataaccordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Thesis
-        </a>
-      </h3>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-		<h5>Thesis</h5>
+                    {% endif %}
+            </div>
+        </article>
+    {%if 'thesis' in source%}
+	<article class="card">
+            <div class="card-header" role="tab" id="headingThree">
+                <h3 class="mb-0">
+                    <a data-parent="#metadataaccordion" data-toggle="collapse"
+                       href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Thesis
+                    </a>
+                </h3>
+            </div>
+            <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="card-block">
+		    <h5>Thesis</h5>
 			{% for thesis in source.get("thesis", [])%}
 			{{ thesis|safe }}
 			{% endfor %}
-		<h5>Thesis Advisor</h5>
+		    <h5>Thesis Advisor</h5>
 			{% for thesisAdvisor in source.get("thesisAdvisor", [])%}
 			{{ thesisAdvisor|safe}}
 			{% endfor %}
-        {% if "sponsor" in source %}
-		<h5>Department/Program</h5>
+                {% if "sponsor" in source %}
+		    <h5>Department/Program</h5>
 			{% for sponsor in source.get("sponsor", [])%}
 			{{ sponsor|safe}}
 			{% endfor %}
-        {% endif %}
-		<h5>Degree Name</h5>
+                {% endif %}
+		    <h5>Degree Name</h5>
 			{% for degreeName in source.get("degreeName", [])%}
 			{{ degreeName|safe}}
 			{% endfor %}	
-		<h5>Degree Type</h5>
+		    <h5>Degree Type</h5>
 			{% for degreeType in source.get("degreeType", [])%}
 			{{ degreeType|safe}}
 			{% endfor %}
-        {% if "degreeGrantor" in source %}
-		<h5>Degree Grantor</h5>
+                {% if "degreeGrantor" in source %}
+		    <h5>Degree Grantor</h5>
 			{% for degreeGrantor in source.get("degreeGrantor", [])%}
 			{{ degreeGrantor|safe}}
 			{% endfor %}
-        {% endif %}
-		<h5>Date Issued</h5>
+                {% endif %}
+		    <h5>Date Issued</h5>
 			{{ source.get('dateIssued') }}
-      </div>
-    </div>
-  </div>
-  	{% endif %}
-</div>  
-				 </section>
-
-		 </div>
- </div>
+            </div>
+        </article>
+    {% endif %}
+        </div>  
+    </section>
+</div>
+</div>
  {% endblock %}
 
  {% block dialogs %}
@@ -265,37 +275,8 @@
  
 {% endblock %}
 
-{% block more_scripts %}
+{% block more_js %}
 <script>
- var detailViewModel = function() {
-   var self = this;
-   self.chosenSearch = ko.observable();
-
-   self.closePlayers = function() {
-       console.log("Close any players");
-   }
-
-   self.searchingOptions =  [
-      { name: "Keyword", search_type: "search" },
-      { name: "Author", search_type: "author_search" },
-      { name: "Title", search_type: "title_search" },
-      { name: "Subject", search_type: "subject_search" },
-      { name: "Number", search_type: "number_search" }
-    ];
-   self.searchQuery = ko.observable();
-   self.searchCatalog = function() {
-     var query = self.searchQuery();
-     if(query) {
-        var url = "{{ url_for('index') }}?q=" + query +"&mode=" + self.chosenSearch()["search_type"];
-        console.log(url);
-        window.location=url; 
-     }
-   }
-   self.searchRouting = function() {}
- }
- var viewModel = new detailViewModel();
- ko.applyBindings(viewModel);
-
  function closeAll (dlg_id) {
    $('#dialog-'+dlg_id).modal('hide');
    $('#viewer-'+dlg_id)[0].pause();
