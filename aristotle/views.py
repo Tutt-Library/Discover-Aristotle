@@ -25,6 +25,7 @@ def about_aristotle():
     indexed_on = datetime.datetime.utcfromtimestamp(int(index_created_on[0:10]))
     return render_template("discovery/About.html",
         indexed_on = indexed_on,
+        search_form=SimpleSearch(),
         version = VERSION)
     
 
@@ -50,15 +51,18 @@ def browser():
 
 @aristotle.route("/contribute")
 def view_contribute():
-    return render_template("discovery/Contribute.html")
+    return render_template("discovery/Contribute.html",
+        search_form=SimpleSearch())
 	
 @aristotle.route("/takedownpolicy")
 def view_takedownpolicy():
-    return render_template("discovery/Takedown.html")	
+    return render_template("discovery/Takedown.html",
+        search_form=SimpleSearch())	
 
 @aristotle.route("/needhelp")
 def view_help():
-    return render_template("discovery/Help.html")	
+    return render_template("discovery/Help.html",
+        search_form=SimpleSearch())	
 	
 @aristotle.route("/pid/<pid>/datastream/<dsid>")
 @aristotle.route("/pid/<pid>/datastream/<dsid>.<ext>")

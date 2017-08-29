@@ -1,25 +1,80 @@
-<footer class="row">
-    <div class="col-md-6"
+<footer class="cc-footer">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-2">
  
-              <h3><a href="https://www.coloradocollege.edu">Colorado College</a></h3>
-        
-        <p class="address">
-          14 East Cache La Poudre St.<br>
-          Colorado Springs, CO 80903<br>
-          <a href="https://www.coloradocollege.edu/basics/campus/campusmap/">Map</a> &amp; <a href="https://www.coloradocollege.edu/basics/campus/directions/">Directions</a>
-        </p>
-   </div>
-    <div class="col-md-6">
-        <nav>
-          <ul class="nav">
-            <li id="nav-offices-and-services" class="col-md-4"><a href="https://www.coloradocollege.edu/basics/offices/">Offices &amp; Services</a></li>
-              <li id="nav-tutt-library"  class="col-md-4"><a href="https://www.coloradocollege.edu/library">Tutt Library</a></li>
-              <li id="nav-contact-us"  class="col-md-4"><a href="https://www.coloradocollege.edu/basics/contact">Contact Us</a></li>
-            </ul>
-            <ul class="nav">
-              <li id="nav-check-email" class="col-md-4"><a href="https://www.coloradocollege.edu/ssi">Sign into CC</a></li>
-              <li id="nav-working-at-cc" class="col-md-4"><a href="https://www.coloradocollege.edu/offices/humanresources/">Working at CC</a></li>
-              <li id="nav-site-feedback" class="col-md-4"><a target="_blank" href="https://www.coloradocollege.edu/home/feedback.html?pageUrl=https://cas.coloradocollege.edu/cas/login">Site Feedback</a></li>
-              </ul>
-        </nav>
+            <img src="{{ url_for('static', filename='img/cc-seal.svg') }}" alt="Colorado College Seal" width="125">
+        </div>
+        <div class="col-md-3">
+            <p class="address">
+                14 East Cache La Poudre St.<br>
+                Colorado Springs, CO 80903<br>
+            </p>
+            <p>
+                <i class="fa fa-mobile cc-txt-gold"></i> (719) 389-6000<br style="margin-bottom: .25em">
+                <i class="fa fa-map-marker cc-txt-gold"></i> <a href="https://www.coloradocollege.edu/basics/campus/campusmap/" 
+                    class="cc-footer" style="font-weight: 800">
+                Map</a> &amp; <a href="https://www.coloradocollege.edu/basics/campus/directions/" class="cc-footer" style="font-weight: 800">Directions</a>
+            
+            </p>
+        </div>
+        <div class="col-md-3">
+            <div class="cc-footer-mtn h-100">
+                <a href="https://www.facebook.com/coloradocollege" title="Colorado College on Facebook" class="cc-txt-white">
+                    <i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+                </a>
+                <a href="https://twitter.com/coloradocollege" title="@ColoradoCollege on Twitter" class="cc-txt-white">
+                    <i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+                </a>
+                <a href="https://instagram.com/coloradocollege/" title="Colorado College on Instagram" class="cc-txt-white">
+                        <i class="fa fa-instagram fa-2x" aria-hidden="true"></i>
+                </a>
+                <a href="https://youtube.com/user/coloradocollegeweb" title="Colorado College on YouTube" class="cc-txt-white">
+                    <i class="fa fa-youtube-square fa-2x" aria-hidden="true"></i>
+                </a>
+                <a href="/newsevents/newsroom" title="Colorado College News" class="cc-txt-white">
+                    <i class="fa fa-rss-square fa-2x" aria-hidden="true"></i>
+                </a>
+                <a href="https://www.coloradocollege.edu/socialmedia" title="More Social Media" class="cc-txt-white">
+                    <i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="cc-footer-links">
+                <div class="row justify-content-center">
+                    <section class="col">
+                        <div class="btn-group-vertical">
+                        <a href="https://www.coloradocollege.edu/us/students" 
+                           class="btn btn-outline-secondary">
+                            Students
+                        </a>
+                        <a href="https://www.coloradocollege.edu/us/faculty" 
+                           class="btn btn-outline-secondary">
+                            Faculty &amp; Staff 
+                        </a>
+                        <a href="https://www.coloradocollege.edu/us/alumni" 
+                           class="btn btn-outline-secondary">
+                            Alumni
+                        </a>
+                        <a href="https://www.coloradocollege.edu/us/parents" 
+                           class="btn btn-outline-secondary">
+                            Parents &amp; Families
+                        </a>
+                        </div>
+                    </section>
+                    <section class="col">
+                        <ul class="cc-txt-bold-sans">
+                           <li><a href="/basics/offices/" class="cc-txt-white">Offices &amp; Services</a></li>
+                           <li><a href="/offices/campussafety/" class="cc-txt-white">Campus Safety</a></li>
+                           <li><a href="/offices/accessibilityresources/" class="cc-txt-white">Accessibility</a></li>
+                           <li><a href="/lifeatcc/activities/diversity/" class="cc-txt-white">Diversity</a></li>
+                           <li><a href="/offices/humanresources/" class="cc-txt-white">Employment</a></li>
+                           <li><a href="/home/feedback.html" class="cc-txt-white">About This Site</a></li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </footer>
