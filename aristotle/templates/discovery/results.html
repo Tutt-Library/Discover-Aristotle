@@ -1,4 +1,4 @@
-{% for hit in results.hits.hits %}
+{# for hit in results.hits.hits %}
 {% set result = hit._source %}
 <div class="row" style="padding-bottom: .5em">
     <div class="card col" >
@@ -26,8 +26,33 @@
         </div>
     </div>
 </div>
-{% endfor %}
+{% endfor #}
 
+<ul class="list-unstyled">
+{% for hit in results.hits.hits %}
+{% set result = hit._source %}
+    <li class="media mb-2">
+        <img class="mr-3 w-25 h-35" src="{{ url_for('aristotle.fedora_object', value=result.get('pid'), identifier="thumbnail") }}"
+             alt="Thumbnail for {{ result.titlePrincipal }}" >
+        <div class="media-body">
+            <h5 class="mt-0 mb-1">
+                <a href="{{ url_for("aristotle.fedora_object", identifier="pid", value=result.pid) }}">{{ result.titlePrincipal }}</a>
+                {% if result.creator %}by 
+                    {% for creator in  result.creator %}
+                    <a href="{{ url_for('aristotle.query') }}?mode=creator&q={{ creator }}">{{ creator }}</a>
+                    {% if not loop.last %},{% else %}</h4>{% endif %}
+                    {% endfor %}
+                {% endif %}
+             </h5>
+             {% for note in result.abstract %}
+                 {% if note and note|length > 0 %}
+                 <p class="card-text">{{ note }}</p>
+                 {% endif %}
+             {% endfor %}
+        </div>
+    </li>
+{% endfor %}
+</ul>
 
 {% if results.hits.total > 25 %}
 <nav aria-label="Search results pagination">

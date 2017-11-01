@@ -1,7 +1,7 @@
 <div class="search-header">
     <div class="container">
         <div class="row">
-           <section class="col-3">
+           <section class="col-md-3">
                <a href="{{ url_for('aristotle.index') }}"><h1 class="search-header display-4">Digital CC</h1></a>    
 
                <h3 class="search-header" style="font-size: 14pt">Contacting Tutt Library</h3>
@@ -13,8 +13,8 @@
                    </li>
                </ul>
            </section>
-           <section class="col-9">
-            <h2 class="cc-txt-white"><em>Colorado College's Institutional Repository</em></h2>
+           <section class="col-md-9">
+            <h2 class="cc-txt-white d-none d-sm-block d-md-block"><em>Colorado College's Institutional Repository</em></h2>
 
               <form class="form search-box" {#method="POST"#} action="{{ url_for('aristotle.query') }}">
                   <div class="row">
