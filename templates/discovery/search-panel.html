@@ -15,7 +15,9 @@
            </section>
            <section class="col-md-9">
             <h2 class="cc-txt-white d-none d-sm-block d-md-block"><em>Colorado College's Institutional Repository</em></h2>
-
+              {% if is_advanced_search %}
+              {% include 'discovery/advanced-search.html' %}
+              {% else %}
               <form class="form search-box" {#method="POST"#} action="{{ url_for('aristotle.query') }}">
                   <div class="row">
                       <div class="col-3">
@@ -38,6 +40,7 @@
                       </div>
                   </div>
               </form>
+              {% endif %}
            </section>
        </div>
    </div>{# END container DIV #}

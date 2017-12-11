@@ -1,0 +1,69 @@
+<form class="form search-box" action="{{ url_for('aristotle.advanced_search') }}" method="POST" style="color: black">
+    {{ adv_search_form.csrf_token }}
+    <h2>Advanced Search</h2> 
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.text_search.mode(class_='form-control') }}
+        </div>
+        <div class="col-8">
+        {{ adv_search_form.text_search.q(class_="form-control")  }}
+        </div>
+        {{ adv_search_form.text_search.csrf_token }}
+        <div class="col-1">
+        <a href="#">+</a>
+        </div>
+    </div>
+    <label>Object Format:</label>
+    {% for field in adv_search_form.obj_format %}
+    {% if not field.label.text.startswith("CSRF") %}
+    <div class="form-check form-check-inline" >
+        <label class='form-check-label'>         
+            {{ field(class_='form-check-input') }}
+            {{ field.label.text }}
+        </label>
+    </div>
+    {% else %}{{ field }}
+    {% endif %}
+    {% endfor %}
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.by_collection.label }}
+        </div>
+        <div class="col-9">
+        {{ adv_search_form.by_collection(class_='form-control') }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.by_genre.label }}
+        </div>
+        <div class="col-9">
+        {{ adv_search_form.by_genre(class_='form-control') }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.by_topic.label }}
+        </div>
+        <div class="col-9">
+        {{ adv_search_form.by_topic(class_='form-control') }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.by_thesis_dept.label }}
+        </div>
+        <div class="col-9">
+        {{ adv_search_form.by_thesis_dept(class_='form-control') }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-3">
+        {{ adv_search_form.by_thesis_advisor.label }}
+        </div>
+        <div class="col-9">
+        {{ adv_search_form.by_thesis_advisor(class_='form-control') }}
+        </div>
+    </div>
+    <input type="submit" class="form-control btn btn-primary" value="Search">
+</form>

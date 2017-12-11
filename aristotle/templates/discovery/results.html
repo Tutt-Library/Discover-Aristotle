@@ -29,6 +29,7 @@
 {% endfor #}
 
 <ul class="list-unstyled">
+{% if results %}
 {% for hit in results.hits.hits %}
 {% set result = hit._source %}
     <li class="media mb-2">
@@ -84,4 +85,5 @@
         </li>
     </ul>
 </nav>
+{% endif %}
 {% endif %}
