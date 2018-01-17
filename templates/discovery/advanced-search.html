@@ -1,4 +1,5 @@
-<form class="form search-box" action="{{ url_for('aristotle.advanced_search') }}" method="POST" style="color: black">
+<form class="form search-box" id="advanced-search" 
+      action="{{ url_for('aristotle.advanced_search') }}" method="POST" style="color: black">
     {{ adv_search_form.csrf_token }}
     <h2>Advanced Search</h2> 
     <div class="form-row">
@@ -10,7 +11,7 @@
         </div>
         {{ adv_search_form.text_search.csrf_token }}
         <div class="col-1">
-        <a href="#">+</a>
+        <a href="#"  id="new-1" onclick="addSearchRow()">+</a>
         </div>
     </div>
     <label>Object Format:</label>

@@ -138,6 +138,7 @@ def advanced_search():
     adv_search_form.by_topic.choices = sorted(adv_search_form.by_topic.choices)
     adv_search_form.by_thesis_dept.choices = [('all', 'All')]
     adv_search_form.validate()
+    print("Advanced search form validation {}".format(adv_search_form.validate()))
     if adv_search_form.validate_on_submit():
         return "In search  form values {}".format(adv_search_form.text_search.data.items())
     return render_template(

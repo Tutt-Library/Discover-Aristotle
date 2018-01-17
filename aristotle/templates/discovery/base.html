@@ -35,6 +35,7 @@
   gtag('config', '{{ config['GOOG_TRACK_CODE'] }}');
 </script>
     {% endif %}
+    <script src="{{ url_for('static', filename='js/advanced-search.js') }}"></script>
    {% block more_js %}
 
     {% endblock %}
