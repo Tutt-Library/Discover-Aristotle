@@ -218,10 +218,12 @@
 			{% for thesis in source.get("thesis", [])%}
 			{{ thesis|safe }}
 			{% endfor %}
+                    {% if "thesisAdvisor" in source %}
 		    <h5>Thesis Advisor</h5>
 			{% for thesisAdvisor in source.get("thesisAdvisor", [])%}
 			{{ thesisAdvisor|safe}}
 			{% endfor %}
+                    {% endif %}
                 {% if "sponsor" in source %}
 		    <h5>Department/Program</h5>
 			{% for sponsor in source.get("sponsor", [])%}
