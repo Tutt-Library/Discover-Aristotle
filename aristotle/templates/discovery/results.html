@@ -55,33 +55,29 @@
 {% endfor %}
 </ul>
 
+<div class="alert">
+    Total hits: {{ results.hits.total }}<br>
+    Offset: {{ offset }}<br>
+    query: {{ q }}<br>
+    size: {{ size }}<br>
+    mode: {{ mode }}
+</div>
 {% if results.hits.total > 25 %}
 <nav aria-label="Search results pagination">
     <ul class="pagination">
-        {% if offset|int > 0  %} 
-        <li class="page-item">
-            <a href="{{ url_for('aristotle.query') }}?mode=facet&facet={{ facet }}&val={{ facet_val }}&from={{ offset|int-25 }}" class="page-link">Previous</a>
+        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?from={{ offset|int-25 }}" 
+              class="page-link">Previous</a>
         </li>
-        {% endif %}
     {% for number in range(0, results.hits.total, 25) %}
-        {% if loop.index < 5 %}
-        <li class="page-item">
-            <a class="page-link" href="">{{ "{:,}".format(number) }}</a>
+        <li class="page-item {% if number == offset|int %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q, offset=number) }}">
+            {% if number == 0 %}{{ "{:,}".format(number+1) }}{% else %}{{ "{:,}".format(number) }}{% endif %}
+            </a>
         </li>
-        {% endif %}
-        {% if loop.index == 5 %}
-        <li class="page-item disabled">
-            <a href="#" class="page-link">&hellip;</a>
-        </li>
-        {% endif %}
-        {% if loop.index >= (loop.length-4) %}
-         <li class="page-item">
-            <a class="page-link" href="#">{{ "{:,}".format(number) }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
-        <li class="page-item">
-            <a href="{{ url_for('aristotle.query') }}?mode=facet&facet={{ facet }}&val={{ facet_val }}&from={{ offset|int+25 }}" class="page-link">Next</a>
+   {% endfor %}
+        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?from={{ offset|int+25 }}" class="page-link">Next</a>
         </li>
     </ul>
 </nav>

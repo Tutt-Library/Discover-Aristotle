@@ -74,16 +74,18 @@ if not REPO_SEARCH:
     # 9200 and 9300
     REPO_SEARCH = Elasticsearch()
 
-def browse(pid, from_=0):
+def browse(pid, from_=0, size=25):
     """Function takes a pid and runs query to retrieve all of it's children
     pids
 
     Args:
 		pid: PID of Fedora Object
+        from_(int): Start result from, default is 0
+        size(int): Size of shard, default is 25
     """
     search = Search(using=REPO_SEARCH, index="repository") \
              .filter("term", parent=pid) \
-             .params(size=50, from_=from_) \
+             .params(size=size, from_=from_) \
              .sort("titlePrincipal.keyword")
     results = search.execute()
     output = results.to_dict()

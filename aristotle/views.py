@@ -257,6 +257,7 @@ def fedora_object(identifier, value):
                 return render_template(
                     'discovery/detail.html',
                     pid=value,
+                    mode='detail',
                     info=detail_result['hits']['hits'][0],
                     search_form=SimpleSearch())
         if value == current_app.config.get("INITIAL_PID"):
@@ -268,6 +269,7 @@ def fedora_object(identifier, value):
             info=get_detail(value)['hits']['hits'][0]['_source'],
             search_form=SimpleSearch(),
             q=value,
+            mode='browse',
             offset=offset,
             facets=get_aggregations(value))
     if identifier.startswith("thumbnail"):
@@ -295,7 +297,7 @@ def fedora_object(identifier, value):
 def index():
     """Displays Home-page of Digital Repository"""
     query = request.args.get('q', None)
-    mode=request.args.get('mode', None)
+    mode=request.args.get('mode', 'browse')
     pid = request.args.get('pid', current_app.config.get("INITIAL_PID"))
     if query is None:  
         results = browse(pid)
