@@ -22,18 +22,27 @@
        </div>
    </div>
 {% endif %}
-{% if mode %}
-   <div class="alert alert-success">
-   {% if mode == 'facet' %}
+{% if mode != 'landing' %}
+<div class="alert alert-success alert-sm">
+    <div class="row">
+        <section class="col-8">
+        {% if mode == 'facet' %}
    Browsing {% if results.hits.total > 0 %}{{ "{:,}".format(results.hits.total) }}{% else %}0{% endif %} result{% if results.hits.total > 1%}s{% endif %}
-   for facet <strong>{{ facet }}</strong> with value of <strong>{{ facet_val }}</strong>. 
-   </div>
-    {% else %}
-    <em>{% if mode == 'kw' %}Keyword{% else %}{{ mode|title }}{% endif %}</em> search 
-    total {{ "{:,}".format(results.hits.total) }} result{% if results.hits.total > 1%}s{% endif %}
-    for <strong>{{ q }}</strong> 
-   {% endif %}
-   </div>
+   for facet <strong>{{ facet }}</strong> with value of <strong>{{ facet_val }}</strong>.
+        {% else %}
+        <em>{% if mode == 'kw' %}Keyword{% else %}{{ mode|title }}{% endif %}</em> 
+        {% if not mode.endswith("browse") %} search{% endif %}
+            result{% if results.hits.total > 1 %}s{% endif %}
+            for <strong>{% if mode.endswith('browse') %}{{ q|title_principal }}{% else %}{{ q }}{% endif %}</strong> 
+        {% endif %}
+        </section>
+        <section class="col-4">
+        {% with paging_size='pagination-sm' %}
+            {% include 'discovery/paging.html' %}
+        {% endwith %}
+        </section>
+    </div>
+</div>
 {% endif %}
 <div class="container">
    <div class="row">

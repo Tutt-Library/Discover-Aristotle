@@ -161,13 +161,13 @@ def query():
         mode = request.form.get('mode', 'keyword')
         facet = request.form.get('facet')
         facet_val = request.form.get('val')
-        from_ = request.form.get('from', 0)
+        offset = request.form.get('offset', 0)
         size = request.form.get('size', 25)
         query = request.form["q"]
     else:
         mode = request.args.get('mode', 'keyword')
         facet = request.args.get('facet')
-        from_ = request.args.get('from', 0)
+        offset = request.args.get('offset', 0)
         size = request.args.get('size', 25)
         facet_val = request.args.get('val')
         query = request.args.get('q', None)
@@ -177,20 +177,20 @@ def query():
                 query,
                 mode,
                 size,
-                from_)
+                offset)
     if mode.startswith("facet"):
         search_results = filter_query(
             facet, 
             facet_val, 
             query,
             size,
-            from_)
+            offset)
     if not search_results and query is not None:
        search_results = specific_search(
            query,
            "keyword",
            size,
-           from_)
+           offset)
     if "html" in request.headers.get("Accept"):
         return render_template(
             'discovery/search-results.html',
@@ -201,7 +201,7 @@ def query():
             search_form=SimpleSearch(),
             q=query,
             size=size,
-            offset=from_
+            offset=offset
         )
     else:
         return jsonify(search_results)
@@ -247,9 +247,12 @@ def fedora_object(identifier, value):
     Returns:
         Rendered HTML from template and Elasticsearch
     """
+    size = request.args.get('size')
+    if size is None:
+        size = current_app.config.get("SIZE", 25) # Default size is 25
     if identifier.startswith("pid"):
         offset = request.args.get("offset", 0)
-        results = browse(value, from_=offset)
+        results = browse(value, from_=offset, size=size)
         if results['hits']['total'] < 1:
             detail_result = get_detail(value)
             if not 'islandora:collectionCModel' in\
@@ -258,7 +261,7 @@ def fedora_object(identifier, value):
                     'discovery/detail.html',
                     pid=value,
                     mode='detail',
-                    size=current_app.config.get("SIZE", 25), # Default size is 25
+                    size=size,
                     info=detail_result['hits']['hits'][0],
                     search_form=SimpleSearch())
         if value == current_app.config.get("INITIAL_PID"):
@@ -271,7 +274,7 @@ def fedora_object(identifier, value):
             search_form=SimpleSearch(),
             q=value,
             mode='browse',
-            size=current_app.config.get("SIZE", 25), # Default size is 25
+            size=size,
             offset=offset,
             facets=get_aggregations(value))
     if identifier.startswith("thumbnail"):
@@ -299,7 +302,7 @@ def fedora_object(identifier, value):
 def index():
     """Displays Home-page of Digital Repository"""
     query = request.args.get('q', None)
-    mode=request.args.get('mode', 'browse')
+    mode=request.args.get('mode', 'landing')
     pid = request.args.get('pid', current_app.config.get("INITIAL_PID"))
     if query is None:  
         results = browse(pid)
@@ -309,6 +312,7 @@ def index():
         'discovery/index.html',
         pid=pid,
         q=query,
+        size=current_app.config.get("SIZE", 25), # Default size is 25
         results = results,
         search_form=SimpleSearch(),
         mode=mode

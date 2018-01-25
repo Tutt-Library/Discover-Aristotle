@@ -1,0 +1,40 @@
+{% if results.hits.total >= size|int %}
+<nav aria-label="Search results pagination">
+    <ul class="pagination {{ paging_size }}">
+        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
+            <a href="{% if mode.startswith('browse') %}{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}{% else %}
+                {{ url_for('aristotle.query') }}?q={{ q }}{% if facet %}&facet={{ facet }}{% endif %}{% endif %}" 
+              class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i> 
+            </a>
+        </li>
+        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
+            <a href="{% if mode.startswith('browse') %}{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int-size|int }}&size={{ size }}
+            {% else %}{{ url_for('aristotle.query')  }}?q={{ q }}&offset={{ offset|int-size|int }}&size={{ size }}{% if facet %}&facet={{ facet }}{% endif %}{% endif %}"
+              class="page-link"><i class="fa fa-angle-left" aria-hidden="true"></i> 
+            </a>
+        </li>
+        <li class="page-item disabled">
+            <a href="#" class="page-link text-dark">
+            {% if offset|int == 0 %}
+            {{ "{:,}".format(offset|int + 1) }}
+            {% else %} 
+            {{ "{:,}".format(offset|int) }}
+            {% endif %} - {% if (offset|int + size|int) >= results.hits.total %}{{ results.hits.total }}
+            {% else %} {{ "{:,}".format(offset|int + size|int) }}{% endif %} of {{ "{:,}".format(results.hits.total) }}
+            </a>
+        </li>
+        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
+            <a href="{% if mode.startswith('browse') %}{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int+size|int }}&size={{ size }}
+                {% else %}{{ url_for('aristotle.query') }}?&q={{ q }}&offset={{ offset|int+size|int }}&size={{ size }}{% if facet %}&facet={{ facet }}{% endif %}{% endif %}"
+             class="page-link">
+                <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </li>
+        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
+            <a href="{% if mode.endswith('browse') %}{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ (results.hits.total - size|int)|int }}
+                {% else %}{{ url_for('aristotle.query') }}?q={{ q }}&offset={{ (results.hits.total - size|int)|int }}{% if facet %}&facet={{ facet }}{% endif %}{% endif %}"
+             class="page-link">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+        </li>
+    </ul>
+</nav>
+{% endif %}

@@ -53,42 +53,14 @@
         </div>
     </li>
 {% endfor %}
-</ul>
 
-<div class="alert">
-    Total hits: {{ results.hits.total }}<br>
-    Offset: {{ offset }}<br>
-    query: {{ q }}<br>
-    size: {{ size }}<br>
-    mode: {{ mode }}
-</div>
-{% if results.hits.total > size %}
-<nav aria-label="Search results pagination">
-    <ul class="pagination">
-        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}" 
-              class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i> 
-            </a>
-        </li>
-        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int-size|int }}" 
-              class="page-link"><i class="fa fa-angle-left" aria-hidden="true"></i> 
-            </a>
-        </li>
-    {% for number in range(0, results.hits.total, size) %}
-        {{ number|page_display(offset, size, q, loop.index0, loop.length)|safe }} 
-    {% endfor %}
-        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int+size|int }}"
-             class="page-link">
-                <i class="fa fa-angle-right" aria-hidden="true"></i></a>
-        </li>
-        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ (results.hits.total - size)|int }}#"
-             class="page-link">
-                <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-        </li>
-    </ul>
-</nav>
+{% if results.hits.total > size|int %}
+    <li>
+        <div class="mt-0 mb-1">
+        {% with paging_size='pagination-lg' %}
+            {% include 'discovery/paging.html' %}
+        {% endwith %}
+        </div>
+    </li>
 {% endif %}
 {% endif %}
