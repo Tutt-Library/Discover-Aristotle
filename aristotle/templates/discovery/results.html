@@ -62,22 +62,31 @@
     size: {{ size }}<br>
     mode: {{ mode }}
 </div>
-{% if results.hits.total > 25 %}
+{% if results.hits.total > size %}
 <nav aria-label="Search results pagination">
     <ul class="pagination">
         <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?from={{ offset|int-25 }}" 
-              class="page-link">Previous</a>
-        </li>
-    {% for number in range(0, results.hits.total, 25) %}
-        <li class="page-item {% if number == offset|int %}active{% endif %}">
-            <a class="page-link" href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q, offset=number) }}">
-            {% if number == 0 %}{{ "{:,}".format(number+1) }}{% else %}{{ "{:,}".format(number) }}{% endif %}
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}" 
+              class="page-link"><i class="fa fa-angle-double-left" aria-hidden="true"></i> 
             </a>
         </li>
-   {% endfor %}
+        <li class="page-item {% if offset|int == 0 %}disabled{% endif %}">
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int-size|int }}" 
+              class="page-link"><i class="fa fa-angle-left" aria-hidden="true"></i> 
+            </a>
+        </li>
+    {% for number in range(0, results.hits.total, size) %}
+        {{ number|page_display(offset, size, q, loop.index0, loop.length)|safe }} 
+    {% endfor %}
         <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
-            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?from={{ offset|int+25 }}" class="page-link">Next</a>
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ offset|int+size|int }}"
+             class="page-link">
+                <i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        </li>
+        <li class="page-item {% if (results.hits.total|int - offset|int) <= 25 %}disabled{% endif %}">
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=q) }}?offset={{ (results.hits.total - size)|int }}#"
+             class="page-link">
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
         </li>
     </ul>
 </nav>

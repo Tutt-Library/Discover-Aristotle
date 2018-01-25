@@ -1,6 +1,7 @@
 __author__ = "Jeremy Nelson"
 
 import re
+from bs4 import BeautifulSoup
 from flask import url_for
 from .blueprint import aristotle
 import search
@@ -33,6 +34,51 @@ def get_icon(datastream):
         return "glyphicon-stats"
     if mime_type.endswith("tif"):
         return "glyphicon-download"
+
+@aristotle.app_template_filter('page_display')
+def build_pagination_button(number, offset, size, query, current_position, total_length):
+    snippet = BeautifulSoup()
+    li = snippet.new_tag("li", **{"class":"page-item"})
+    anchor = snippet.new_tag("a", **{"class": "page-link"})
+    anchor.string = "{:,}".format(number)
+    offset = int(offset)
+    
+    if offset == number:
+        li.attrs["class"].append("active")
+    anchor.attrs["href"] = url_for("aristotle.fedora_object",
+                                     identifier="pid",
+                                     value=query) + "?offset={}".format(number)
+    if number == 0:
+        anchor.string = "1"
+    if total_length >= 10:
+        lower_bound = (offset - 3*size)
+        upper_bound = (offset + 3*size)
+        if (lower_bound > 0 and lower_bound == number) or \
+           (upper_bound == number and current_position+1 != total_length):
+            li.attrs["class"].append("disabled")
+            anchor.attrs["href"] = "#"
+            anchor.string= "..."
+        elif (lower_bound - size) == number or offset == number or (upper_bound - size) == number :
+            print((lower_bound - size), number)
+
+            pass
+        #else:
+            #return ""
+        #return ""   
+        #if not (total_length - current_position) == 1 and \
+        #   not number == current_position and \
+        #   not offset-number == size and \
+        #   not offset-number == -size:
+        #    return "" 
+        #elif (offset-number) == size*2 or (offset-number) == -(size*2):
+        
+    li.insert(0, anchor)
+  
+    return str(li)
+
+            
+            
+    
 
 @aristotle.app_template_filter('scripts')
 def get_scripts(s):
@@ -144,4 +190,6 @@ def generate_viewer(datastream, dlg_number):
         return """<img src="{}" class="center-block img-thumbnail">""".format(ds_url)
     if mime_type.endswith("tif"):
         return TIFF_TEMPLATE.format(ds_url)        
+
+
 

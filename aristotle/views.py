@@ -258,6 +258,7 @@ def fedora_object(identifier, value):
                     'discovery/detail.html',
                     pid=value,
                     mode='detail',
+                    size=current_app.config.get("SIZE", 25), # Default size is 25
                     info=detail_result['hits']['hits'][0],
                     search_form=SimpleSearch())
         if value == current_app.config.get("INITIAL_PID"):
@@ -270,6 +271,7 @@ def fedora_object(identifier, value):
             search_form=SimpleSearch(),
             q=value,
             mode='browse',
+            size=current_app.config.get("SIZE", 25), # Default size is 25
             offset=offset,
             facets=get_aggregations(value))
     if identifier.startswith("thumbnail"):
