@@ -174,12 +174,12 @@ def specific_search(query, type_of, size=25, from_=0, pid=None):
                      Q("match_phrase", **{"subject.temporal": query}))
     elif query is None and pid is not None:
         search = search.filter("term", parent=pid) \
-                 .params(size=50, from_=from_) \
+                 .params(size=size, from_=from_) \
                  .sort("titlePrincipal")
     else:
         search = search.query(
             Q("query_string", query=query, default_operator="AND"))
-    search.params(size=size, from_=from_)
+        search = search.params(size=size, from_=from_)
     search.aggs.bucket("Format", A("terms", field="typeOfResource"))
     search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
     search.aggs.bucket("Genres", A("terms", field="genre"))
@@ -188,6 +188,7 @@ def specific_search(query, type_of, size=25, from_=0, pid=None):
     search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
     search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     results = search.execute()
+    print("Size of results: {:,}, size={:,} offset={:,}".format(len(results), int(size), int(from_)))
     return results.to_dict()
 
 def get_aggregations(pid=None):
