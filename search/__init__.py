@@ -74,6 +74,36 @@ if not REPO_SEARCH:
     # 9200 and 9300
     REPO_SEARCH = Elasticsearch()
 
+def advanced_search(form):
+    """Function takes the Advanced Search form and builds query
+
+    Args:
+        form(AdvancedSearch): Advanced Search form
+    """
+    results = []
+
+    mode = form.text_search.mode.data
+    query = form.text_search.q.data
+    search = Search(using=REPO_SEARCH, index="repository")
+    if mode.startswith("creator"):
+        type_search_value = Q("match_phrase", creator=query)
+    else:
+        type_search_value = Q("query_string", query=query, default_operator="AND")
+    for row in form.obj_format:
+        if row.data is True:
+            if row.name.endswith("audio"):
+                value = "sound recording"
+            elif row.name.endwith("image"):
+                value = "still image"
+            elif row.name.endswith("mixed_media"):
+                value = "mixed media"
+            elif row.name.endswith("pdf"):
+                value = "text"
+            search = search(type_search_value|
+                Q("match_phrase", typeOfResource=value))
+    
+    return results
+
 def browse(pid, from_=0, size=25):
     """Function takes a pid and runs query to retrieve all of it's children
     pids
@@ -101,7 +131,7 @@ def browse(pid, from_=0, size=25):
     search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     facets = search.execute()
     output['aggregations'] = facets.to_dict()["aggregations"]
-    return output
+    return outputa
 
 def filter_query(facet, facet_value, query=None, size=25, from_=0):
     """Function takes a facet, facet_value, and query string, and constructs

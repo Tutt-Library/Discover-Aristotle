@@ -15,8 +15,9 @@ from flask import abort, jsonify, render_template, redirect, request,\
 from . import cache, REPO_SEARCH
 from .blueprint import aristotle
 from .forms import SimpleSearch, AdvancedSearch
-from search import browse, filter_query, get_aggregations, get_detail, get_pid,\
-    specific_search
+from search import advanced_search, browse, filter_query, get_aggregations,\
+    get_detail, get_pid, specific_search
+
 
 @aristotle.route("/about")
 def about_aristotle():
@@ -120,12 +121,17 @@ def image(uid):
         return Response(result.text, mimetype="image/jpeg")
 
 @aristotle.route("/advanced-search",  methods=["POST", "GET"])
-def advanced_search():
+def advanced_searching():
     """Advanced search"""
     query=request.args.get('q', None)
     facets=get_aggregations(current_app.config.get("INITIAL_PID"))
     adv_search_form = AdvancedSearch()
     adv_search_form.by_genre.choices = []
+    mode=request.args.get("mode", "kw")
+    size=request.args.get("size", 25)
+    offset=request.args.get("offset", 0)
+    facet=request.args.get("facet")
+    facet_value = request.args.get("val")
     for bucket in facets.get("Genres").get('buckets'):
         key = bucket.get('key')
         adv_search_form.by_genre.choices.append((key, 
@@ -137,17 +143,29 @@ def advanced_search():
         adv_search_form.by_topic.choices.append((key, key.title()))
     adv_search_form.by_topic.choices = sorted(adv_search_form.by_topic.choices)
     adv_search_form.by_thesis_dept.choices = [('all', 'All')]
-    adv_search_form.validate()
-    print("Advanced search form validation {}".format(adv_search_form.validate()))
     if adv_search_form.validate_on_submit():
-        return "In search  form values {}".format(adv_search_form.text_search.data.items())
+        search_results = advanced_search(adv_search_form)
+        #if "html" in request.headers.get("Accept"):
+        return render_template(
+            'discovery/search-results.html',
+            facet=facet,
+            facet_val=facet_value,
+            mode=mode,
+            is_advanced_search=True,
+            results = search_results,
+            adv_search_form=adv_search_form,
+            q=query,
+            size=size,
+            offset=offset
+        )
+        #return "In search  form values {}".format(adv_search_form.text_search.data.items())
     return render_template(
         'discovery/index.html',
         pid="coccc:root",
         is_advanced_search=True,
         adv_search_form=adv_search_form,
         q=query,
-        mode=request.args.get('mode', None)
+        mode=request.args.get('mode', 'kw')
     )
 
 @aristotle.route("/search", methods=["POST", "GET"])

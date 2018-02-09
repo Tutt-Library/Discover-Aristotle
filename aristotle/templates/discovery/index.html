@@ -29,17 +29,19 @@
         {% if mode == 'facet' %}
    Browsing {% if results.hits.total > 0 %}{{ "{:,}".format(results.hits.total) }}{% else %}0{% endif %} result{% if results.hits.total > 1%}s{% endif %}
    for facet <strong>{{ facet }}</strong> with value of <strong>{{ facet_val }}</strong>.
-        {% else %}
+        {% elif results %}
         <em>{% if mode == 'kw' %}Keyword{% else %}{{ mode|title }}{% endif %}</em> 
         {% if not mode.endswith("browse") %} search{% endif %}
             result{% if results.hits.total > 1 %}s{% endif %}
             for <strong>{% if mode.endswith('browse') %}{{ q|title_principal }}{% else %}{{ q }}{% endif %}</strong> 
         {% endif %}
         </section>
+        {% if results %}
         <section class="col-4">
         {% with paging_size='pagination-sm' %}
             {% include 'discovery/paging.html' %}
         {% endwith %}
+        {% endif %}
         </section>
     </div>
 </div>
