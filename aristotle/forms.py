@@ -25,7 +25,8 @@ class ObjectFormatForm(Form):
 class AdvancedSearch(Form):
     text_search = FormField(SimpleSearch)
     by_collection = SelectField("Narrow by Collection",
-        choices=(("thesis", "Thesis"),
+        choices=(("none", "None"),
+                 ("thesis", "Thesis"),
                  ("special collections", "Special Collections"),
                  ("general", "General College"),
                  ("music library", "Music Library")))

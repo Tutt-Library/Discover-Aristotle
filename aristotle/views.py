@@ -136,12 +136,14 @@ def advanced_searching():
         key = bucket.get('key')
         adv_search_form.by_genre.choices.append((key, 
                                                  key.title()))
-    adv_search_form.by_genre.choices = sorted(adv_search_form.by_genre.choices)
+    adv_search_form.by_genre.choices =  sorted(adv_search_form.by_genre.choices)
+    adv_search_form.by_genre.choices.insert(0, ("none", "None"))
     adv_search_form.by_topic.choices = []
     for bucket in facets.get("Topic").get('buckets'):
         key = bucket.get('key')
         adv_search_form.by_topic.choices.append((key, key.title()))
     adv_search_form.by_topic.choices = sorted(adv_search_form.by_topic.choices)
+    adv_search_form.by_topic.choices.insert(0, ("none", "None"))
     adv_search_form.by_thesis_dept.choices = [('all', 'All')]
     if adv_search_form.validate_on_submit():
         search_results = advanced_search(adv_search_form)

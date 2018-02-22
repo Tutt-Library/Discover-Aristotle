@@ -80,8 +80,6 @@ def advanced_search(form):
     Args:
         form(AdvancedSearch): Advanced Search form
     """
-    results = []
-
     mode = form.text_search.mode.data
     query = form.text_search.q.data
     search = Search(using=REPO_SEARCH, index="repository")
@@ -93,16 +91,19 @@ def advanced_search(form):
         if row.data is True:
             if row.name.endswith("audio"):
                 value = "sound recording"
-            elif row.name.endwith("image"):
+            elif row.name.endswith("image"):
                 value = "still image"
             elif row.name.endswith("mixed_media"):
                 value = "mixed media"
             elif row.name.endswith("pdf"):
                 value = "text"
-            search = search(type_search_value|
-                Q("match_phrase", typeOfResource=value))
-    
-    return results
+            search = search.query(
+                type_search_value|Q("match_phrase", typeOfResource=value))
+                
+    results = search.execute()
+    output = results.to_dict()
+    output['aggregations'] = dict()
+    return output
 
 def browse(pid, from_=0, size=25):
     """Function takes a pid and runs query to retrieve all of it's children
@@ -131,7 +132,7 @@ def browse(pid, from_=0, size=25):
     search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     facets = search.execute()
     output['aggregations'] = facets.to_dict()["aggregations"]
-    return outputa
+    return output
 
 def filter_query(facet, facet_value, query=None, size=25, from_=0):
     """Function takes a facet, facet_value, and query string, and constructs
