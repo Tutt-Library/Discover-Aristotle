@@ -98,6 +98,25 @@ def slugify(value):
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     return re.sub('[-\s]+', '-', value)
 
+@aristotle.app_template_filter('sort_ds')
+def sort_datastreams(datastreams):
+    """Filter takes a list of datastreams and returns the sorted
+    datastreams depending on the keys in each datastream dict.
+
+    Args:
+        datastreams(list): List of Datastreams dicts
+    """
+    if datastreams is None or len(datastreams) < 1:
+        return []
+    if "order" in datastreams[0]:
+        datastreams.sort(key=lambda x: x['order'])
+    elif "label" in datastreams[0]:
+        datastreams.sort(key=lambda x: x['label'])
+    else:
+        datastreams.sort(key=lambda x: x["dsid"])
+    return datastreams
+        
+
 @aristotle.app_template_filter('styles')
 def get_styles(s):
     styles = cache.get('styles')
