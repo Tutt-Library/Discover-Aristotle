@@ -94,6 +94,8 @@ def advanced_search(form):
         if row.data is True:
             if row.name.endswith("audio"):
                 value = "sound recording"
+            elif row.name.endswith("moving_image"):
+                value = "moving image"
             elif row.name.endswith("image"):
                 value = "still image"
             elif row.name.endswith("mixed_media"):
@@ -116,7 +118,6 @@ def advanced_search(form):
     search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     results = search.execute()
     output = results.to_dict()
-    #output['aggregations'] = results["aggregations"]
     return output
 
 def __by_collection__(search, collection_data):
