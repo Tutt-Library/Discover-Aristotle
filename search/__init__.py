@@ -86,7 +86,10 @@ def advanced_search(form):
     if mode.startswith("creator"):
         type_search_value = Q("match_phrase", creator=query)
     else:
-        type_search_value = Q("query_string", query=query, default_operator="AND")
+        type_search_value = Q("query_string", query=query)
+    search = search.query(type_search_value)
+
+    obj_formats = []
     for row in form.obj_format:
         if row.data is True:
             if row.name.endswith("audio"):
@@ -97,13 +100,54 @@ def advanced_search(form):
                 value = "mixed media"
             elif row.name.endswith("pdf"):
                 value = "text"
-            search = search.query(
-                type_search_value|Q("match_phrase", typeOfResource=value))
-                
+            obj_formats.append(Q("match_phrase", typeOfResource=value))
+    if len(obj_formats) > 0:
+        search = search.query(Q('bool', must=obj_formats))
+    search = __by_collection__(search, form.by_collection.data)
+    if form.by_genre.data and form.by_genre.data != "none":
+        search = search.query(Q("match_phrase", genre=form.by_genre.data)) 
+    search = __by_topic__(search, form.by_topic.data)
+    search.aggs.bucket("Format", A("terms", field="typeOfResource"))
+    search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
+    search.aggs.bucket("Genres", A("terms", field="genre"))
+    search.aggs.bucket("Languages", A("terms", field="language.keyword"))
+    search.aggs.bucket("Publication Year", A("terms", field="publicationYear"))
+    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
+    search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     results = search.execute()
     output = results.to_dict()
-    output['aggregations'] = dict()
+    #output['aggregations'] = results["aggregations"]
     return output
+
+def __by_collection__(search, collection_data):
+    """Helper function adds by_collection if available"""
+    if collection_data.endswith("thesis"):
+        search = search.query(Q("match_phrase", genre="thesis"))
+    elif collection_data.endswith("special collections"):
+        spc_collection_search = Search(using=REPO_SEARCH, index='repository')
+        spc_collection_search = spc_collection_search.query(
+            Q("match_phrase", titlePrincipal="Special Collections Materials")).\
+            source(["pid"])
+        spc_collection_result = spc_collection_search.execute()
+        if spc_collection_result.hits.total > 0:
+            in_collection = spc_collection_result.hits.hits[0]["_source"]["pid"]
+            search = search.query(Q("match_phrase", inCollection=in_collection))
+    ## elif collection_data.endswith("general"):
+    elif collection_data.endswith("music library"):
+        music_dept_search = Search(using=REPO_SEARCH, index="repository")
+        music_dept_search = music_dept_search.query(
+            Q("match_phrase", titlePrincipal="Music Department")).\
+            source(["pid"])
+        music_dept_result = music_dept_search.execute()
+        if music_dept_result.hits.count > 0:
+            in_music = music_dept_result.hits.hits[0]["_source"]["pid"]
+            search = search.query(Q("match_phrase", inCollection=in_music))
+    return search
+
+def __by_topic__(search, topic_data):
+    """Helper function adds by_topic """
+    return search
+    
 
 def browse(pid, from_=0, size=25):
     """Function takes a pid and runs query to retrieve all of it's children
@@ -219,7 +263,6 @@ def specific_search(query, type_of, size=25, from_=0, pid=None):
     search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
     search.aggs.bucket("Topic", A("terms", field="subject.topic"))
     results = search.execute()
-    print("Size of results: {:,}, size={:,} offset={:,}".format(len(results), int(size), int(from_)))
     return results.to_dict()
 
 def get_aggregations(pid=None):
