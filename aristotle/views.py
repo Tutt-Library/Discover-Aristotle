@@ -335,5 +335,7 @@ def index():
         size=current_app.config.get("SIZE", 25), # Default size is 25
         results = results,
         search_form=SimpleSearch(),
+        featured_collection=browse(
+            current_app.config.get("FEATURED_COLLECTION")),
         mode=mode
     )
