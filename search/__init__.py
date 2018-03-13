@@ -168,13 +168,13 @@ def browse(pid, from_=0, size=25):
     search = Search(using=REPO_SEARCH, index="repository") \
              .filter("term", inCollections=pid) \
              .params(size=0)
-    search.aggs.bucket("Format", A("terms", field="typeOfResource"))
-    search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
-    search.aggs.bucket("Genres", A("terms", field="genre"))
+    search.aggs.bucket("Format", A("terms", field="typeOfResource.keyword"))
+    search.aggs.bucket("Geographic", A("terms", field="subject.geographic.keyword"))
+    search.aggs.bucket("Genres", A("terms", field="genre.keyword"))
     search.aggs.bucket("Languages", A("terms", field="language.keyword"))
-    search.aggs.bucket("Publication Year", A("terms", field="publicationYear"))
-    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
-    search.aggs.bucket("Topic", A("terms", field="subject.topic"))
+    search.aggs.bucket("Publication Year", A("terms", field="publicationYear.keyword"))
+    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal.keyword"))
+    search.aggs.bucket("Topic", A("terms", field="subject.topic.keyword"))
     facets = search.execute()
     output['aggregations'] = facets.to_dict()["aggregations"]
     return output
