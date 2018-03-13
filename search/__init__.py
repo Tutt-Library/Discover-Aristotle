@@ -24,17 +24,17 @@ AGGS_DSL = {
     "aggs": {
         "Format": {
              "terms": {
-                 "field": "typeOfResource"
+                 "field": "typeOfResource.keyword"
             }
         },
         "Geographic": {
             "terms": {
-                "field": "subject.geographic"
+                "field": "subject.geographic.keyword"
             }
         },
         "Genres": {
             "terms": {
-                "field": "genre"
+                "field": "genre.keyword"
             }
         },
         "Languages": {
@@ -44,17 +44,17 @@ AGGS_DSL = {
         },
         "Publication Year": {
             "terms": {
-                "field": "publicationYear"
+                "field": "publicationYear.keyword"
 			}
         },
         "Temporal (Time)": {
             "terms": {
-                "field": "subject.temporal"
+                "field": "subject.temporal.keyword"
             }
         },
         "Topic": {
             "terms": {
-                "field": "subject.topic"
+                "field": "subject.topic.keyword"
             }
         }
     }
