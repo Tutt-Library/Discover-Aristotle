@@ -20,4 +20,4 @@ EXPOSE 5000
 WORKDIR $DIGCC_HOME
 #CMD ["/usr/local/bin/supervisord"]
 #CMD ["python", "run.py"]
-CMD ["nohup", "gunicorn", "-b", "0.0.0.0:5000", "run:app"]
+CMD ["nohup", "gunicorn", "-b", "0.0.0.0:5000", "run:application"]

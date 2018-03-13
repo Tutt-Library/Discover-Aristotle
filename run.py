@@ -7,7 +7,7 @@ from app import app
 
 application = DispatcherMiddleware(
     app,
-    {"/digital-cc": app }
+    {"/digitalcc": app }
 )
 
 if __name__ == '__main__':
