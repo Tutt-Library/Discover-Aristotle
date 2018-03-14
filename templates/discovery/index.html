@@ -30,12 +30,12 @@
                 {% for row in featured_collection.hits.hits %}
                 {% set result = row._source %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
-                    <img class="d-block" style="height: 450px"
-                       src="{{ url_for('aristotle.fedora_datastream', 
+                    <a href="#"><img class="d-block" style="height: 450px"
+                       src="{{ url_for('.fedora_datastream', 
                                        pid=result.get('pid'), 
                                        dsid="OBJ",
                                        ext="jpg") }}" 
-                        alt="{{ loop.index0 }} slide ">
+                        alt="{{ loop.index0 }} slide "></a>
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ result.get("titlePrincipal") }}</h5>
                     </div> 
@@ -73,6 +73,9 @@
         </div>
     </div>
     <br>
+    {% if mode != "landing" %}
+    {% include "discovery/results.html" %}
+    {% endif %}
     <div class="row tutt-blue-background mx-1">
         <div class="col">
                 
