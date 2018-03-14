@@ -17,3 +17,4 @@ parts/
 bin/
 eggs/
 downloads/
+tmp/

@@ -24,17 +24,17 @@ AGGS_DSL = {
     "aggs": {
         "Format": {
              "terms": {
-                 "field": "typeOfResource"
+                 "field": "typeOfResource.keyword"
             }
         },
         "Geographic": {
             "terms": {
-                "field": "subject.geographic"
+                "field": "subject.geographic.keyword"
             }
         },
         "Genres": {
             "terms": {
-                "field": "genre"
+                "field": "genre.keyword"
             }
         },
         "Languages": {
@@ -44,17 +44,17 @@ AGGS_DSL = {
         },
         "Publication Year": {
             "terms": {
-                "field": "publicationYear"
+                "field": "publicationYear.keyword"
 			}
         },
         "Temporal (Time)": {
             "terms": {
-                "field": "subject.temporal"
+                "field": "subject.temporal.keyword"
             }
         },
         "Topic": {
             "terms": {
-                "field": "subject.topic"
+                "field": "subject.topic.keyword"
             }
         }
     }
@@ -160,7 +160,7 @@ def browse(pid, from_=0, size=25):
         size(int): Size of shard, default is 25
     """
     search = Search(using=REPO_SEARCH, index="repository") \
-             .filter("term", parent=pid) \
+             .filter("term", **{"parent.keyword": pid}) \
              .params(size=size, from_=from_) \
              .sort("titlePrincipal.keyword")
     results = search.execute()
@@ -168,13 +168,13 @@ def browse(pid, from_=0, size=25):
     search = Search(using=REPO_SEARCH, index="repository") \
              .filter("term", inCollections=pid) \
              .params(size=0)
-    search.aggs.bucket("Format", A("terms", field="typeOfResource"))
-    search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
-    search.aggs.bucket("Genres", A("terms", field="genre"))
+    search.aggs.bucket("Format", A("terms", field="typeOfResource.keyword"))
+    search.aggs.bucket("Geographic", A("terms", field="subject.geographic.keyword"))
+    search.aggs.bucket("Genres", A("terms", field="genre.keyword"))
     search.aggs.bucket("Languages", A("terms", field="language.keyword"))
-    search.aggs.bucket("Publication Year", A("terms", field="publicationYear"))
-    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
-    search.aggs.bucket("Topic", A("terms", field="subject.topic"))
+    search.aggs.bucket("Publication Year", A("terms", field="publicationYear.keyword"))
+    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal.keyword"))
+    search.aggs.bucket("Topic", A("terms", field="subject.topic.keyword"))
     facets = search.execute()
     output['aggregations'] = facets.to_dict()["aggregations"]
     return output
@@ -256,13 +256,13 @@ def specific_search(query, type_of, size=25, from_=0, pid=None):
         search = search.query(
             Q("query_string", query=query, default_operator="AND"))
         search = search.params(size=size, from_=from_)
-    search.aggs.bucket("Format", A("terms", field="typeOfResource"))
-    search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
-    search.aggs.bucket("Genres", A("terms", field="genre"))
+    search.aggs.bucket("Format", A("terms", field="typeOfResource.keyword"))
+    search.aggs.bucket("Geographic", A("terms", field="subject.geographic.keyword"))
+    search.aggs.bucket("Genres", A("terms", field="genre.keyword"))
     search.aggs.bucket("Languages", A("terms", field="language.keyword"))
-    search.aggs.bucket("Publication Year", A("terms", field="dateCreated"))
-    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
-    search.aggs.bucket("Topic", A("terms", field="subject.topic"))
+    search.aggs.bucket("Publication Year", A("terms", field="dateCreated.keyword"))
+    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal.keyword"))
+    search.aggs.bucket("Topic", A("terms", field="subject.topic.keyword"))
     results = search.execute()
     return results.to_dict()
 
@@ -297,7 +297,7 @@ def get_detail(pid):
         pid -- PID of Fedora Object
     """
     search = Search(using=REPO_SEARCH, index="repository") \
-             .filter("term", pid=pid)
+             .filter("term", **{"pid.keyword":pid})
     result = search.execute()
     if len(result) < 1:
         # Raise 404 error because PID not found
@@ -321,7 +321,7 @@ def get_title(pid):
     Args:
         pid -- PID of Fedora Object
     """
-    result = REPO_SEARCH.search(body={"query": {"term": {"pid": pid }},
+    result = REPO_SEARCH.search(body={"query": {"term": {"pid.keyword": pid }},
 			                         "_source": ["titlePrincipal"]},
                                 index='repository')
     if result.get('hits').get('total') == 1:

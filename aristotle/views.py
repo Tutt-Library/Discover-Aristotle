@@ -6,6 +6,8 @@ import datetime
 import os
 import requests
 
+import click
+
 HOME = os.path.abspath(os.curdir)
 with open(os.path.join(HOME, "VERSION")) as fo:
     VERSION = fo.read()
@@ -226,9 +228,6 @@ def query():
     else:
         return jsonify(search_results)
     
-
-
-
 @aristotle.route("/pid/<pid>/datastream/<dsid>.<ext>")
 def fedora_datastream(pid, dsid, ext):
     """View returns a specific Fedora Datastream including Images, PDFs,
@@ -253,6 +252,7 @@ def fedora_datastream(pid, dsid, ext):
     if ext.startswith("wav"):
         mimetype = "audio/wav"
     return Response(result.text, mimetype=mimetype) 
+
 
 @aristotle.route("/<identifier>/<value>")
 def fedora_object(identifier, value):
@@ -317,6 +317,8 @@ def fedora_object(identifier, value):
 
 
     return "Should return detail for {} {}".format(identifier, value)
+
+
 
 @aristotle.route("/")
 def index():
