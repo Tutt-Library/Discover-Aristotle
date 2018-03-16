@@ -3,7 +3,7 @@ FROM tuttlibrary/python-base
 MAINTAINER Jeremy Nelson <jermnelson@gmail.com>
 
 # Set environmental variables
-ENV DIGCC_GIT https://github.com/Tutt-Library/digital-cc.git
+#ENV DIGCC_GIT https://github.com/Tutt-Library/digital-cc.git
 ENV DIGCC_HOME /opt/digital-cc
 
 # Clone master branch of Tutt Library Digitial CC repository,
@@ -24,6 +24,5 @@ COPY instance/conf.py $DIGCC_HOME/instance/conf.py
 EXPOSE 5000
 
 WORKDIR $DIGCC_HOME
-#CMD ["/usr/local/bin/supervisord"]
-#CMD ["python", "run.py"]
-CMD ["nohup", "gunicorn", "-b", "0.0.0.0:5000", "run:application"]
+#CMD ["nohup", "gunicorn", "-b", "0.0.0.0:5000", "run:app"]
+CMD ["nohup", "gunicorn", "-b", "0.0.0.0:5000", "run:app"]

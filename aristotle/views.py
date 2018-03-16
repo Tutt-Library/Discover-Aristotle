@@ -20,7 +20,7 @@ from .forms import SimpleSearch, AdvancedSearch
 from search import advanced_search, browse, filter_query, get_aggregations,\
     get_detail, get_pid, specific_search
 
-
+@aristotle.route("/digitalcc/about")
 @aristotle.route("/about")
 def about_aristotle():
     """Displays details of current version of Aristotle"""
@@ -319,7 +319,7 @@ def fedora_object(identifier, value):
     return "Should return detail for {} {}".format(identifier, value)
 
 
-
+@aristotle.route("/digitalcc")
 @aristotle.route("/")
 def index():
     """Displays Home-page of Digital Repository"""

@@ -2,7 +2,7 @@ __author__ = "Jeremy Nelson"
 
 import os
 
-from flask import Flask
+from flask import Flask, request
 from werkzeug.contrib.cache import FileSystemCache
 from werkzeug.contrib.fixers import ProxyFix
 from aristotle.blueprint import aristotle
@@ -13,7 +13,11 @@ app = Flask(__name__,
 
 app.config.from_pyfile('conf.py')
 
-app.register_blueprint(aristotle)#, url_prefix='/digitalcc')
+app.register_blueprint(aristotle)
+
+@app.errorhandler(404)
+def dcc_404_debug(e):
+    return "Failed to find {}".format(request.url), 404
 
 #app.wsgi_app = ProxyFix(app.wsgi_app)
 #app.url_map.strict_slashes = False
