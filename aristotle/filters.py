@@ -7,6 +7,57 @@ from .blueprint import aristotle
 import search
 
 
+@aristotle.app_template_filter('carousel_item')
+def generate_carousel_item(hit, count):
+    """Filter takes an Elasticsearch hit and generates a bootstrap carousel 
+    item.
+
+    Args:
+        hits(list): A list of Elastic search hits
+    """
+    result = hit.get("_source")
+    carousel = BeautifulSoup()
+    item_attrs = { "class": "carousel-item"}
+    if int(count) < 1:
+        item_attrs["class"] += " active"   
+    div = carousel.new_tag("div", **item_attrs)
+    repo_link = carousel.new_tag(
+        "a", 
+        **{"href": url_for("aristotle.fedora_object", 
+                           identifier="pid", 
+                           value=result.get("pid"))})
+    if "islandora:compoundCModel" in result.get("content_models"):
+        for stream in result.get("datastreams"):
+            if stream.get("dsid").startswith("OBJ") and \
+               stream.get("order").startswith('1'):
+                src = url_for("aristotle.fedora_datastream",
+                              pid=stream.get("pid"),
+                              dsid="OBJ",
+                              ext="jpg")
+                break
+    else:
+        src = url_for("aristotle.fedora_datastream",
+            pid=result.get("pid"),
+            dsid="OBJ",
+            ext="jpg")
+    img_attrs = {"class": "d-block",
+                 "style": "height: 450px",
+                 "src": src,
+                 "alt": "{} slide".format(count)}
+
+    img = carousel.new_tag("img", **img_attrs)
+    repo_link.append(img)
+    div.append(repo_link)
+    title = carousel.new_tag(
+        "div",
+        **{"class": "carousel-caption d-none d-md-block"})
+    h5 = carousel.new_tag("h5")
+    h5.string = result.get("titlePrincipal")
+    title.append(h5)
+    div.append(title)
+    return div.prettify()
+        
+
 @aristotle.app_template_filter('icon')
 def get_icon(datastream):
     """Filter returns the glyphicon CSS class for a datastream

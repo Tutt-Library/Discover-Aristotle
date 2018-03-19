@@ -28,8 +28,11 @@
               <div class="carousel-inner tutt-blue-background">
                 
                 {% for row in featured_collection.hits.hits %}
-                {% set result = row._source %}
-                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                {# set result = row._source #}
+                {{ row|carousel_item(loop.index0)|safe }}
+    
+                {#<div class="carousel-item {% if loop.first %}active{% endif %}">
+                    
                     <a href="#"><img class="d-block" style="height: 450px"
                        src="{{ url_for('.fedora_datastream', 
                                        pid=result.get('pid'), 
@@ -39,7 +42,8 @@
                     <div class="carousel-caption d-none d-md-block">
                         <h5>{{ result.get("titlePrincipal") }}</h5>
                     </div> 
-                </div>
+                </div>#}
+
                 {% endfor %}
               </div>
               <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -52,7 +56,7 @@
               </a>
             </div>
             <div class="tutt-blue-background d-block text-white">
-                Featured Collection: {{ featured_collection.title }}
+                Featured Collection: <strong>{{ config.FEATURED_COLLECTION|title_principal }}</strong>
             </div>
         </div>
    </div>
