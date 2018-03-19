@@ -15,8 +15,8 @@ app.config.from_pyfile('conf.py')
 
 app.register_blueprint(aristotle)#, url_prefix='/digitalcc')
 
-app.wsgi_app = ProxyFix(app.wsgi_app)
-app.url_map.strict_slashes = False
+#app.wsgi_app = ProxyFix(app.wsgi_app)
+#app.url_map.strict_slashes = False
 
 #aristotle_templates = app.blueprints.get(
 #    'aristotle').jinja_loader.list_templates()
