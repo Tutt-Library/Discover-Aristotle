@@ -299,10 +299,8 @@ def get_detail(pid):
     search = Search(using=REPO_SEARCH, index="repository") \
              .filter("term", **{"pid.keyword":pid})
     result = search.execute()
-    if len(result) < 1:
-        # Raise 404 error because PID not found
-        abort(404)
-    return result.to_dict()
+    if len(result) > 0:
+        return result.to_dict()
  
 
 def get_pid(es_id):

@@ -2,6 +2,7 @@
 Flask using Elasticsearch"""
 __author__ = "Jeremy Nelson"
 
+import click
 import datetime
 import os
 import requests
@@ -60,6 +61,11 @@ def view_contribute():
 @aristotle.route("/takedownpolicy")
 def view_takedownpolicy():
     return render_template("discovery/Takedown.html",
+        search_form=SimpleSearch())
+
+@aristotle.route("/thesis-capstones")
+def theses_capstones():
+    return render_template("discovery/ThesesCapstones.html",
         search_form=SimpleSearch())	
 
 @aristotle.route("/needhelp")
@@ -285,12 +291,14 @@ def fedora_object(identifier, value):
                     info=detail_result['hits']['hits'][0],
                     search_form=SimpleSearch())
         if value == current_app.config.get("INITIAL_PID"):
-            return redirect(url_for('aristotle.index'))
+            info = dict()
+        else:
+            info = get_detail(value)['hits']['hits'][0]['_source']
         return render_template(
             'discovery/index.html',
             pid=value,
             results=results,
-            info=get_detail(value)['hits']['hits'][0]['_source'],
+            info=info,
             search_form=SimpleSearch(),
             q=value,
             mode='browse',

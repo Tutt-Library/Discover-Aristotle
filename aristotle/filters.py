@@ -40,8 +40,8 @@ def generate_carousel_item(hit, count):
             pid=result.get("pid"),
             dsid="OBJ",
             ext="jpg")
-    img_attrs = {"class": "d-block",
-                 "style": "height: 450px",
+    img_attrs = {"class": "d-block img-fluid mt-2",
+                 "style": "height: 450px", 
                  "src": src,
                  "alt": "{} slide".format(count)}
 
