@@ -251,3 +251,20 @@
             </div>
 {# END Secondary Navigation #}
         </div>
+
+{# Start Digital CC Header #}
+<div class="container tutt-blue-background" {#style="background-color: rgb(59,82,163)" #}>
+    <div class="row">
+        <div class="col-5">
+            <img src="{{ url_for('static', filename='img/dcc-logo.png') }}"> 
+        </div>
+        <div class="col">
+            <div style="background-color: #D09B2C; height: 50px;" class="mt-3" >
+            <br>
+        {% include 'discovery/simple-search.html' %}
+            </div>
+        </div>
+
+    </div>
+{# End Digital CC Header #}
+</div>

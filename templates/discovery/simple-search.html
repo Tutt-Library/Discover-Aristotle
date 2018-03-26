@@ -1,20 +1,23 @@
 <div class="row justify-content-center">
-     <div class="col-md-8 offset-md-2">
-         <div id="simple-search" class="align-middle tutt-blue-background p-1">
+     <div class="col-12">
+         <div id="simple-search" class="align-middle">
              <form action="{{ url_for('aristotle.query') }}">
                  <div class="form-row">
-                     <div class="col-2">
+                     <div class="col-3">
                          {{ search_form.mode(class_="form-control") }}
                      </div>
-                     <div class="col-9">
+                     <div class="col-7">
                          {{ search_form.q(class_="form-control", placeholder='Search') }}
                      </div>
                      <div class="col-1">
                          <button type="submit" class="btn tutt-blue-background text-white">GO</button>
                      </div>
+                     <div class="col-1">
+<a href="#" class="pull-right">Advanced Search</a>
+                    </div>
                 </div>
              </form>
          </div>
-         <a href="#" class="pull-right">Advanced Search</a>
+         
      </div>
 </div>

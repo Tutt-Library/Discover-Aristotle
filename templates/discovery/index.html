@@ -40,7 +40,7 @@
     </ol>
     {% endif %}
     {% endif %}
-   <h1><a  style="color: #212529;" href="{{ url_for('aristotle.index') }}">Digital CC</a>{% if info %}- <em>{{ info.titlePrincipal }}</em>{% endif %}</h1>
+    {% if info %}<h1>{{ info.titlePrincipal }}</h1>{% endif %}
     {% if featured_collection %}
    <div class="row justify-content-center my-3">
         <div class="col-md-8 offset-md-2">
