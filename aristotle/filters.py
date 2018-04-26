@@ -9,7 +9,6 @@ from flask import url_for
 from .blueprint import aristotle
 import search
 
-
 @aristotle.app_template_filter('icon')
 def get_icon(datastream):
     """Filter returns the glyphicon CSS class for a datastream
