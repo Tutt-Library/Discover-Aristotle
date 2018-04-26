@@ -1,6 +1,9 @@
 __author__ = "Jeremy Nelson"
 
 import re
+
+import click
+
 from bs4 import BeautifulSoup
 from flask import url_for
 from .blueprint import aristotle
@@ -109,7 +112,7 @@ def sort_datastreams(datastreams):
     if datastreams is None or len(datastreams) < 1:
         return []
     if "order" in datastreams[0]:
-        datastreams.sort(key=lambda x: x['order'])
+        datastreams.sort(key=lambda x: int(x['order']))
     elif "label" in datastreams[0]:
         datastreams.sort(key=lambda x: x['label'])
     else:
