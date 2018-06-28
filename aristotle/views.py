@@ -133,6 +133,8 @@ def advanced_searching():
     """Advanced search"""
     query=request.args.get('q', None)
     facets=get_aggregations(current_app.config.get("INITIAL_PID"))
+    for key, val in request.form.items():
+        click.echo(f"{key}={val}")
     adv_search_form = AdvancedSearch()
     adv_search_form.by_genre.choices = []
     mode=request.args.get("mode", "kw")
@@ -168,6 +170,8 @@ def advanced_searching():
             size=size,
             offset=offset
         )
+    else:
+        click.echo("Form errors {}".format(adv_search_form.errors.items()))
         #return "In search  form values {}".format(adv_search_form.text_search.data.items())
     return render_template(
         'discovery/index.html',

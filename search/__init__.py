@@ -80,14 +80,14 @@ def advanced_search(form):
     Args:
         form(AdvancedSearch): Advanced Search form
     """
-    mode = form.text_search.mode.data
-    query = form.text_search.q.data
     search = Search(using=REPO_SEARCH, index="repository")
-    if mode.startswith("creator"):
-        type_search_value = Q("match_phrase", creator=query)
-    else:
-        type_search_value = Q("query_string", query=query)
-    search = search.query(type_search_value)
+    for row in form.text_search:
+        if row.mode.data.startswith("creator"):
+            search = search.query(Q("match_phrase", creator=row.q.data))
+        elif row.mode.data.startswith("kw"):
+            search = search.query(Q("query_string", query=row.q.data))
+        elif row.mode.data.startswith("subject"):
+            search = search.query(Q("match_phrase", **{"subject.topic": row.q.data}))
 
     obj_formats = []
     for row in form.obj_format:
@@ -102,14 +102,14 @@ def advanced_search(form):
                 value = "mixed media"
             elif row.name.endswith("pdf"):
                 value = "text"
-            obj_formats.append(Q("match_phrase", typeOfResource=value))
+            #obj_formats.append(Q("match_phrase", typeOfResource=value))
     if len(obj_formats) > 0:
         search = search.query(Q('bool', must=obj_formats))
     search = __by_collection__(search, form.by_collection.data)
     if form.by_genre.data and form.by_genre.data != "none":
         search = search.query(Q("match_phrase", genre=form.by_genre.data)) 
     search = __by_topic__(search, form.by_topic.data)
-    search.aggs.bucket("Format", A("terms", field="typeOfResource"))
+    #search.aggs.bucket("Format", A("terms", field="typeOfResource"))
     search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
     search.aggs.bucket("Genres", A("terms", field="genre"))
     search.aggs.bucket("Languages", A("terms", field="language.keyword"))

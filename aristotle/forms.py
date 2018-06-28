@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm as Form
-from wtforms import BooleanField, SelectField, StringField, FormField
+from wtforms import BooleanField, SelectField, StringField, FormField, FieldList
 
 SEARCH_TYPES = (
     ("kw", "Keyword"),
@@ -23,7 +23,7 @@ class ObjectFormatForm(Form):
     pdf = BooleanField("PDF")
     
 class AdvancedSearch(Form):
-    text_search = FormField(SimpleSearch)
+    text_search = FieldList(FormField(SimpleSearch), min_entries=2)
     by_collection = SelectField("Narrow by Collection",
         choices=(("none", "None"),
                  ("thesis", "Thesis"),

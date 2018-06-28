@@ -15,5 +15,18 @@
 })();
 
 function addSearchRow() {
-    console.log("New row is trying to href " + this);
+    // var currentRow = $(this).parent();
+    var searchRow = $(".search-row:last");
+    var currentSize = $(".search-row").length;
+    var newRow = searchRow.clone();
+    newRow.children().each(function(index) {
+        $(this).children("select, input").each(function() {
+            var currentId = $(this).prop("id");
+            currentId = currentId.replace(/([\d*])/, currentSize);
+            $(this).prop("id", currentId);
+            $(this).prop("name", currentId);
+            $(this).val("");
+        });
+    });
+    searchRow.after(newRow);
 }

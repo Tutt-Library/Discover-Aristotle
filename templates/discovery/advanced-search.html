@@ -1,19 +1,21 @@
 <form class="form search-box" id="advanced-search" 
       action="{{ url_for('aristotle.advanced_searching') }}" method="POST" style="color: black">
     {{ adv_search_form.csrf_token }}
-    <h2>Advanced Search</h2> 
-    <div class="form-row">
+    <h2>Advanced Search</h2>
+    {% for text_search in adv_search_form.text_search %} 
+    <div class="form-row search-row">
         <div class="col-3">
-        {{ adv_search_form.text_search.mode(class_='form-control') }}
+        {{ text_search.mode(class_='form-control') }}
         </div>
         <div class="col-8">
-        {{ adv_search_form.text_search.q(class_="form-control")  }}
+        {{ text_search.q(class_="form-control")  }}
         </div>
-        {{ adv_search_form.text_search.csrf_token }}
+        {{ text_search.csrf_token }}
         <div class="col-1">
         <a href="#"  id="new-1" onclick="addSearchRow()">+</a>
         </div>
     </div>
+    {% endfor %}
     <label>Object Format:</label>
     {% for field in adv_search_form.obj_format %}
     {% if not field.label.text.startswith("CSRF") %}
