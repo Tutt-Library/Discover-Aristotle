@@ -18,6 +18,9 @@ function addSearchRow() {
     // var currentRow = $(this).parent();
     var searchRow = $(".search-row:last");
     var currentSize = $(".search-row").length;
+    if(currentSize >= 5) {
+        return;
+    }
     var newRow = searchRow.clone();
     newRow.children().each(function(index) {
         $(this).children("select, input").each(function() {

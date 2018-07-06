@@ -260,14 +260,17 @@
                 <img src="{{ url_for('static', filename='img/dcc-logo.png') }}"> 
             </a>
         </div>
+ 
         <div class="col">
-            <div style="background-color: #D09B2C; height: 70px; margin-top: 40px; margin-bottom: 3px" {#class="mt-3"#} >
-            <br>
-           {% if not is_advanced_search %} 
+       {% if is_advanced_search %}
+            <h2 style="color: white; font-weight: bold" class="mt-5">Advanced Search</h2>
+        {% else %} 
+            <div style="background-color: #D09B2C; height: 70px; margin-top: 20px; {#margin-bottom: 3px#}" {#class="mt-3"#} >
                 {% include 'discovery/simple-search.html' %}
-            {% endif %}
             </div>
+        {% endif %}
         </div>
+
 
     </div>
 {# End Digital CC Header #}

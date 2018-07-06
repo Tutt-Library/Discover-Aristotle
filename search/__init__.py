@@ -81,15 +81,33 @@ def advanced_search(form):
         form(AdvancedSearch): Advanced Search form
     """
     search = Search(using=REPO_SEARCH, index="repository")
+    query_chain = None
     for row in form.text_search:
+        if len(row.q.data) < 1:
+            continue
         if row.mode.data.startswith("creator"):
-            search = search.query(Q("match_phrase", creator=row.q.data))
+            query = Q("match_phrase", creator=row.q.data)
         elif row.mode.data.startswith("kw"):
-            search = search.query(Q("query_string", query=row.q.data))
+            query = Q("query_string", query=row.q.data)
         elif row.mode.data.startswith("subject"):
-            search = search.query(Q("match_phrase", **{"subject.topic": row.q.data}))
-
-    obj_formats = []
+            query = Q("multi_match", 
+                      query=row.q.data, 
+                      fields=["subject.geographic",
+                              "subject.topic",
+                              "subject.temporal"])
+        elif row.mode.data.startswith("title"):
+            query = Q("match_phrase", titlePrincipal=row.q.data)
+        if query_chain is not None:
+            if row.operator.data.startswith("or"):
+                query_chain = query_chain | query
+            elif row.operator.data.startswith("not"):
+                query_chain = query_chain&~query
+            else:
+                query_chain = query_chain & query
+        else:
+            query_chain = query
+    search = search.query(query_chain)   
+    obj_formats = None
     for row in form.obj_format:
         if row.data is True:
             if row.name.endswith("audio"):
@@ -98,27 +116,31 @@ def advanced_search(form):
                 value = "moving image"
             elif row.name.endswith("image"):
                 value = "still image"
-            elif row.name.endswith("mixed_media"):
-                value = "mixed media"
+            elif row.name.endswith("mixed_material"):
+                value = "mixed material"
             elif row.name.endswith("pdf"):
                 value = "text"
-            #obj_formats.append(Q("match_phrase", typeOfResource=value))
-    if len(obj_formats) > 0:
-        search = search.query(Q('bool', must=obj_formats))
+            obj_query = Q("match_phrase", typeOfResource=value)
+            if obj_formats is None:
+                obj_formats = obj_query
+            else:
+                obj_formats = obj_formats|obj_query
+    if obj_formats:
+        search = search.query(obj_formats)
     search = __by_collection__(search, form.by_collection.data)
     if form.by_genre.data and form.by_genre.data != "none":
         search = search.query(Q("match_phrase", genre=form.by_genre.data)) 
     search = __by_topic__(search, form.by_topic.data)
-    #search.aggs.bucket("Format", A("terms", field="typeOfResource"))
-    search.aggs.bucket("Geographic", A("terms", field="subject.geographic"))
-    search.aggs.bucket("Genres", A("terms", field="genre"))
+    search.aggs.bucket("Format", A("terms", field="typeOfResource.keyword"))
+    search.aggs.bucket("Geographic", A("terms", field="subject.geographic.keyword"))
+    search.aggs.bucket("Genres", A("terms", field="genre.keyword"))
     search.aggs.bucket("Languages", A("terms", field="language.keyword"))
-    search.aggs.bucket("Publication Year", A("terms", field="publicationYear"))
-    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal"))
-    search.aggs.bucket("Topic", A("terms", field="subject.topic"))
+    search.aggs.bucket("Publication Year", A("terms", field="publicationYear.keyword"))
+    search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal.keyword"))
+    search.aggs.bucket("Topic", A("terms", field="subject.topic.keyword"))
     results = search.execute()
     output = results.to_dict()
-    return output
+    return output, search.to_dict()
 
 def __by_collection__(search, collection_data):
     """Helper function adds by_collection if available"""
