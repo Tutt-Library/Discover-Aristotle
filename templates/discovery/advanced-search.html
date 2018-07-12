@@ -1,19 +1,23 @@
 <form class="form search-box" id="advanced-search" 
       action="{{ url_for('aristotle.advanced_searching') }}" method="POST" style="color: black">
     {{ adv_search_form.csrf_token }}
-    <h2>Advanced Search</h2> 
-    <div class="form-row">
+    {% for text_search in adv_search_form.text_search %} 
+    <div class="form-row search-row">
         <div class="col-3">
-        {{ adv_search_form.text_search.mode(class_='form-control') }}
+        {{ text_search.mode(class_='form-control') }}
         </div>
-        <div class="col-8">
-        {{ adv_search_form.text_search.q(class_="form-control")  }}
+        <div class="col-7">
+        {{ text_search.q(class_="form-control")  }}
         </div>
-        {{ adv_search_form.text_search.csrf_token }}
+        <div class="col-1">
+        {{ text_search.operator(class_="form-control") }}
+        </div>
         <div class="col-1">
         <a href="#"  id="new-1" onclick="addSearchRow()">+</a>
         </div>
+        {{ text_search.csrf_token }}
     </div>
+    {% endfor %}
     <label>Object Format:</label>
     {% for field in adv_search_form.obj_format %}
     {% if not field.label.text.startswith("CSRF") %}
@@ -50,7 +54,7 @@
         {{ adv_search_form.by_topic(class_='form-control') }}
         </div>
     </div>
-    <div class="form-row">
+    {#<div class="form-row">
         <div class="col-3">
         {{ adv_search_form.by_thesis_dept.label }}
         </div>
@@ -65,6 +69,13 @@
         <div class="col-9">
         {{ adv_search_form.by_thesis_advisor(class_='form-control') }}
         </div>
+    </div>#}
+    <div class="row">
+        <div class="col-md-8">&nbsp;</div>
+        <div class="col-md-2">
+            <br>
+            <input type="submit" class="form-control btn btn-primary" value="Search">
+        </div>
     </div>
-    <input type="submit" class="form-control btn btn-primary" value="Search">
+    <br>
 </form>

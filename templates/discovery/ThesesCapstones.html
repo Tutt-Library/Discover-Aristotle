@@ -1,0 +1,238 @@
+{% extends 'discovery/base.html' %}
+
+{% block more_css %}
+<style>
+.link-footer {
+    color: white;
+}
+
+.logo-background {
+    background-image: url("{{ url_for('static', filename="img/cc-background.png") }}");
+}
+
+.tutt-blue-background {
+    background-color: #3a52a3;
+}
+
+.thesis-link {
+    color: #212529;
+    font-size: 1.5em;
+    margin-left: .5em;
+}
+
+</style>
+{% endblock %}
+
+{% block main %}
+<div class="logo-background">
+    <br>
+    <div class="container">
+        <a  href="{{ url_for('aristotle.index') }}"><h1 style="color: #212529;">Digital CC</h1></a>
+       <div class="tutt-blue-background">
+            <h1 class="display-4 text-center text-white">Senior Theses, Essays, and Capstones</h1>
+            {% include 'discovery/simple-search.html' %}
+            <div class="row">
+                <div class="col" >
+                    <ul class="logo-background list-unstyled ml-3 h-100">         
+                        <li class="mt-1">
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5211") }}">
+                            Anthropology</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6760") }}">
+                            Art</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5217") }}">
+                            Asian Studies</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5042") }}">
+                            Biology</a>
+                            
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6116") }}">
+                            Business and Economics</a>
+                            
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6567") }}">
+                            Chemistry and Biochemistry</a>
+                            
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5015") }}">
+                            Classics</a>
+                            
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5052") }}">
+                            Comparative Literature</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5019") }}">
+                            Education</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5061") }}">
+                            English</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5101") }}">
+                            Environmental Science</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link"
+                              href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5220") }}">
+                            Feminist and Gender Studies</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col">
+                    <ul class="logo-background list-unstyled h-100">
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6576") }}">
+                            Film and New Media</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5068") }}">
+                            French and Italian</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5099") }}">
+                            Geology</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5069") }}">
+                            German</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5012") }}">
+                            History</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6573") }}">
+                            Human Biology and Kinesiology</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:27057") }}">
+                            Independently Designed</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5250") }}">
+                           Mathematics and Computer Science</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:10471") }}">
+                           Molecular Biology</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5653") }}">
+                           Music</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5099") }}">
+                           Neuroscience</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:10467") }}">
+                           Organismal Biology and Ecology</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <ul class="logo-background list-unstyled mr-3 h-100">
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5077") }}">
+                           Philosophy</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6570") }}">
+                            Physics</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5080") }}">
+                            Political Science</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:28776") }}">
+                            Pre 1930's Master Theses</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5083") }}">
+                            Race and Ethnic Studies</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5087") }}">
+                            Religion</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5223") }}">
+                            Russian and Eurasian Studies</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5090") }}">
+                            Sociology</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5226") }}">
+                            Southwest Studies</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5093") }}">
+                            Spanish and Portuguese</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5472") }}">
+                            Summer Programs</a>
+                        </li>
+                        <li>
+                            <a class="thesis-link" 
+                               href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:6241") }}">
+                            Theatre and Dance</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div><br>
+            {% include 'discovery/links.html' %}
+       </div>
+    </div>
+</div>
+{% endblock %}

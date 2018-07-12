@@ -1,0 +1,113 @@
+{% extends 'discovery/base.html' %}
+
+{% block more_css %}
+<style>
+#landing {
+    background-image: url("{{ url_for('static', filename="img/cc-background.png") }}");
+}
+
+.tutt-blue-background {
+    background-color: #3a52a3;
+}
+
+.carousel-inner > .carousel-item > img,
+  .carousel-inner > .carousel-item > a > img {
+      margin: auto;
+  }
+
+.img-fluid {
+    height: 175px;
+}
+</style>
+{% endblock %}
+
+
+{% block main %}
+<div class="container" id="landing">
+    {% if mode != 'landing' %}
+    <br>
+    {% if info and 'inCollections' in info %}
+    <ol class="breadcrumb">
+    {% for row in info.get('inCollections', []) %}
+        <li class="breadcrumb-item {% if loop.last %}active{% endif %}">
+            <a href="{{ url_for('aristotle.fedora_object', identifier='pid', value=row) }}">
+        {{ row|title_principal|truncate(30, True) }}</a>
+        </li>
+    {% endfor %}
+        <li class="breadcrumb-item active">
+            {{ info.titlePrincipal|truncate(30, True) }}
+        </li>
+    </ol>
+    {% endif %}
+    {% endif %}
+    {% if info %}<h1>{{ info.titlePrincipal }}</h1>{% endif %}
+    {% if featured_collection %}
+   <div class="row justify-content-center my-3">
+        <div class="col-md-8 offset-md-2">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner tutt-blue-background">
+                {% for row in featured_collection.hits.hits %}
+                {{ row|carousel_item(loop.index0)|safe }}
+                {% endfor %}
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+            <div class="tutt-blue-background d-block text-white">
+                <span class="ml-1">Featured Collection: <strong>{{ config.FEATURED_COLLECTION|title_principal }}</strong></span>
+            </div>
+        </div>
+   </div>
+    {% endif %}
+    {% if is_advanced_search %}
+        {% include 'discovery/advanced-search.html' %}
+    {% endif %}
+    {% if mode != "landing" %}
+    <div class="row">
+        <div class="col-8">
+            {% include "discovery/results.html" %}
+        </div>
+        <div class="col-4">
+            {% include 'discovery/facets.html' %}
+        </div>
+    </div>
+    {% else %}
+        <div class="row tutt-blue-background">
+           <div class="col text-center mt-3">
+               <a href="{{ url_for('aristotle.theses_capstones') }}" >
+                   <img src="{{ url_for('static', filename='img/Theses.jpeg') }}" class="img-fluid" 
+                        alt="Theses and Capstone Homepage">
+                   <h5 class="text-white">Senior Theses, Essays, and Capstones</h5>
+               </a>
+           </div>
+           <div class="col text-center mt-3">
+               <a href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5454") }}">
+                   <img src="{{ url_for('static', filename='img/SpecialCollections.jpeg') }}" class="img-fluid">
+                   <h5 class="text-white">Special Collections</h5>
+               </a>
+           </div>
+           <div class="col text-center mt-3">
+               <a href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:5652") }}">
+                    <img src="{{ url_for('static', filename='img/MusicTN.jpg') }}" class="img-fluid">
+                    <h5 class="text-white">Seay Music Library</h5>
+                </a>
+           </div>
+           <div class="col text-center mt-3">
+               <a href="{{ url_for("aristotle.fedora_object", identifier="pid", value="coccc:root") }}">
+                   <img src="{{ url_for('static', filename='img/CCSquareLogo.jpg') }}" class="img-fluid">
+                   <h5 class="text-white">Browse All</h5>
+               </a>
+           </div>
+        </div>
+    {% endif %}
+    {% include 'discovery/links.html' %}
+</div>
+{% endblock %}
+
+

@@ -1,33 +1,12 @@
-{# for hit in results.hits.hits %}
-{% set result = hit._source %}
-<div class="row" style="padding-bottom: .5em">
-    <div class="card col" >
-        <div class="row">
-            <section class="col-3">
-                <img src="{{ url_for('aristotle.fedora_object', value=result.get('pid'), identifier="thumbnail") }}"
-                     class="" style="width: 175px; margin: .5em">
-            </section>
-            <section class="col-9">
-                <h3 class="card-title">
-                    <a href="{{ url_for("aristotle.fedora_object", identifier="pid", value=result.pid) }}">{{ result.titlePrincipal }}</a>
-                </h3>
-                {% if result.creator %}<h4 class="card-title">by
-                    {% for creator in  result.creator %}
-                    <a href="{{ url_for('aristotle.query') }}?mode=creator&q={{ creator }}">{{ creator }}</a>
-                    {% if not loop.last %},{% else %}</h4>{% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% for note in result.abstract %}
-                    {% if note and note|length > 0 %}
-                    <p class="card-text">{{ note }}</p>
-                    {% endif %}
-                {% endfor %}
-            </section>
-        </div>
-    </div>
+{% if results %}
+<div class="alert alert-success">
+    <h3>{{ results.hits.total }} hits </h3>
+    {{ q }}
+    {# for key, val in q.query.items() %}
+        <p><em>{{ key }}</em> {{ val }}</p>
+    {% endfor #}
 </div>
-{% endfor #}
-
+{% endif %}
 <ul class="list-unstyled">
 {% if results %}
 {% for hit in results.hits.hits %}
@@ -63,4 +42,5 @@
         </div>
     </li>
 {% endif %}
+</ul>
 {% endif %}

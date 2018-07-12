@@ -2,6 +2,7 @@
 Flask using Elasticsearch"""
 __author__ = "Jeremy Nelson"
 
+import click
 import datetime
 import os
 import requests
@@ -60,6 +61,11 @@ def view_contribute():
 @aristotle.route("/takedownpolicy")
 def view_takedownpolicy():
     return render_template("discovery/Takedown.html",
+        search_form=SimpleSearch())
+
+@aristotle.route("/thesis-capstones")
+def theses_capstones():
+    return render_template("discovery/ThesesCapstones.html",
         search_form=SimpleSearch())	
 
 @aristotle.route("/needhelp")
@@ -146,9 +152,9 @@ def advanced_searching():
         adv_search_form.by_topic.choices.append((key, key.title()))
     adv_search_form.by_topic.choices = sorted(adv_search_form.by_topic.choices)
     adv_search_form.by_topic.choices.insert(0, ("none", "None"))
-    adv_search_form.by_thesis_dept.choices = [('all', 'All')]
+    #adv_search_form.by_thesis_dept.choices = [('all', 'All')]
     if adv_search_form.validate_on_submit():
-        search_results = advanced_search(adv_search_form)
+        search_results, query = advanced_search(adv_search_form)
         #if "html" in request.headers.get("Accept"):
         return render_template(
             'discovery/search-results.html',
@@ -162,6 +168,8 @@ def advanced_searching():
             size=size,
             offset=offset
         )
+    else:
+        click.echo("Form errors {}".format(adv_search_form.errors.items()))
         #return "In search  form values {}".format(adv_search_form.text_search.data.items())
     return render_template(
         'discovery/index.html',
@@ -285,12 +293,14 @@ def fedora_object(identifier, value):
                     info=detail_result['hits']['hits'][0],
                     search_form=SimpleSearch())
         if value == current_app.config.get("INITIAL_PID"):
-            return redirect(url_for('aristotle.index'))
+            info = dict()
+        else:
+            info = get_detail(value)['hits']['hits'][0]['_source']
         return render_template(
             'discovery/index.html',
             pid=value,
             results=results,
-            info=get_detail(value)['hits']['hits'][0]['_source'],
+            info=info,
             search_form=SimpleSearch(),
             q=value,
             mode='browse',
@@ -337,5 +347,7 @@ def index():
         size=current_app.config.get("SIZE", 25), # Default size is 25
         results = results,
         search_form=SimpleSearch(),
+        featured_collection=browse(
+            current_app.config.get("FEATURED_COLLECTION")),
         mode=mode
     )
