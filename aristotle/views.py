@@ -57,7 +57,12 @@ def browser():
 def view_contribute():
     return render_template("discovery/Contribute.html",
         search_form=SimpleSearch())
-	
+
+@aristotle.route("/copyright")
+def view_copyright():
+    return render_template("discovery/Copyright.html",
+        search_form=SimpleSearch())
+
 @aristotle.route("/takedownpolicy")
 def view_takedownpolicy():
     return render_template("discovery/Takedown.html",
