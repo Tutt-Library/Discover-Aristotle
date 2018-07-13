@@ -1,7 +1,6 @@
 {% if results %}
 <div class="alert alert-success">
     <h3>{{ results.hits.total }} hits </h3>
-    {{ q }}
     {# for key, val in q.query.items() %}
         <p><em>{{ key }}</em> {{ val }}</p>
     {% endfor #}
@@ -9,6 +8,7 @@
 {% endif %}
 <ul class="list-unstyled">
 {% if results %}
+
 {% for hit in results.hits.hits %}
 {% set result = hit._source %}
     <li class="media mb-2">
@@ -33,7 +33,7 @@
     </li>
 {% endfor %}
 
-{% if results.hits.total > size|int %}
+{% if results.hits.total > size|int and not is_advanced_search %}
     <li>
         <div class="mt-0 mb-1">
         {% with paging_size='pagination-lg' %}

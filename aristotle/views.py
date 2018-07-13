@@ -136,7 +136,7 @@ def advanced_searching():
     adv_search_form = AdvancedSearch()
     adv_search_form.by_genre.choices = []
     mode=request.args.get("mode", "kw")
-    size=request.args.get("size", 25)
+    size=request.args.get("size", 125)
     offset=request.args.get("offset", 0)
     facet=request.args.get("facet")
     facet_value = request.args.get("val")

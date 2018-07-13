@@ -138,6 +138,7 @@ def advanced_search(form):
     search.aggs.bucket("Publication Year", A("terms", field="publicationYear.keyword"))
     search.aggs.bucket("Temporal (Time)", A("terms", field="subject.temporal.keyword"))
     search.aggs.bucket("Topic", A("terms", field="subject.topic.keyword"))
+    search = search.params(size=250)
     results = search.execute()
     output = results.to_dict()
     return output, search.to_dict()
