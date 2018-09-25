@@ -6,12 +6,8 @@
     color: white;
 }
 
-.logo-background {
-    background-image: url("{{ url_for('static', filename="img/cc-background.png") }}");
-}
-
 .tutt-blue-background {
-    background-color: #3a52a3;
+    background-color: #4764AE;
 }
 
 .thesis-link {
@@ -27,11 +23,9 @@
 <div class="logo-background">
     <br>
     <div class="container">
-        <a  href="{{ url_for('aristotle.index') }}"><h1 style="color: #212529;">Digital CC</h1></a>
-       <div class="tutt-blue-background">
+        <div class="tutt-blue-background">
             <h1 class="display-4 text-center text-white">Senior Theses, Essays, and Capstones</h1>
-            {% include 'discovery/simple-search.html' %}
-            <div class="row">
+              <div class="row">
                 <div class="col" >
                     <ul class="logo-background list-unstyled ml-3 h-100">         
                         <li class="mt-1">
