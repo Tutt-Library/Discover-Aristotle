@@ -2,9 +2,6 @@
 
 {% block more_css %}
 <style>
-.link-footer {
-    color: white;
-}
 
 .tutt-blue-background {
     background-color: #4764AE;
@@ -20,7 +17,7 @@
 {% endblock %}
 
 {% block main %}
-<div class="logo-background">
+<div>
     <br>
     <div class="container">
         <div class="tutt-blue-background">
@@ -225,7 +222,7 @@
                 </div>
             </div>
        </div><br>
-        <div style="color:#0056b3;">{% include 'discovery/links.html' %}</div>
+        {% include 'discovery/links.html' %}
     </div>
 </div>
 {% endblock %}
