@@ -38,7 +38,7 @@
     {% endif %}
     {% if info %}<h1>{{ info.titlePrincipal }}</h1>{% endif %}
     {% if featured_collection %}
-   <div class="row justify-content-center my-3">
+   <!--<div class="row justify-content-center my-3">
         <div class="col-md-8 offset-md-2">
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner tutt-blue-background">
@@ -59,7 +59,7 @@
                 <span class="ml-1">Featured Collection: <strong>{{ config.FEATURED_COLLECTION|title_principal }}</strong></span>
             </div>
         </div>
-   </div>
+   </div>-->
     {% endif %}
     {% if is_advanced_search %}
         {% include 'discovery/advanced-search.html' %}
@@ -74,7 +74,7 @@
         </div>
     </div>
     {% else %}
-        <div class="row tutt-blue-background">
+        <!--<div class="row tutt-blue-background">
            <div class="col text-center mt-3">
                <a href="{{ url_for('aristotle.theses_capstones') }}" >
                    <img src="{{ url_for('static', filename='img/Theses.jpeg') }}" class="img-fluid" 
@@ -100,7 +100,7 @@
                    <h5 class="text-white">Browse All</h5>
                </a>
            </div>
-        </div>
+        </div>-->
     {% endif %}
 
 </div>
