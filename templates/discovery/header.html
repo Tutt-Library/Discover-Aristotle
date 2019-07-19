@@ -128,7 +128,7 @@
     
 </style>
 {% endblock %}
-<!--<div class="header container">
+<div class="header container">
     <div class="row" >
         <div class="col-md-6" style="padding-top: 1em;">
             <img src="{{ url_for('static', filename='img/cc-logo.png') }}" 
@@ -256,7 +256,7 @@
                 </div>
             </div>
 {# END Secondary Navigation #}
-        </div>-->
+        </div>
 
 {# Start Digital CC Header #}
 <div class="container tutt-blue-background" {#style="background-color: rgb(59,82,163)" #}>
@@ -264,22 +264,21 @@
         <div class="col-5">
             <a href="{{ url_for('aristotle.index') }}">
                 <img src="{{ url_for('static', filename='img/CC-Lib-Logo.png') }}"> 
-            </a><h1 style="color: white;">&nbsp;&nbsp;DigitalCC</h1><br>
+            </a><h1 style="color: white;">&nbsp;&nbsp;DigitalCC</h1>
         </div>
  
-        <!--<div class="col">
+        <div class="col">
        {% if is_advanced_search %}
             <h2 style="color: white; font-weight: bold" class="mt-5">Advanced Search</h2>
         {% else %} 
             <div style="background-color: #D09B2C; height: 70px; margin-top: 20px; {#margin-bottom: 3px#}" {#class="mt-3"#} >
                 {% include 'discovery/simple-search.html' %}
-            </div>-->
+            </div>
             <div class="col">
-                <!--<h5 style="color:white";>Use AND (in capitals) to search multiple keywords.<br>Example: harmonica AND cobos</h5>-->
-                <h2 style="color: white;">NOTICE: DigitalCC is down for emergency maintenance. Please contact <u><a style="color: white;" href="mailto:cguenther@coloradocollege.edu">Cate Guenther</a></u>, Digital Scholarship and Repository Librarian, (719)389-6875 for assistance.</h2> 
-            </div><!--
+                <h5 style="color:white";>Use AND (in capitals) to search multiple keywords.<br>Example: harmonica AND cobos</h5>
+            </div>
         {% endif %}
-        </div>-->
+        </div>
     </div>
         {% include 'discovery/links.html' %}
     {# End Digital CC Header #}
